@@ -1,10 +1,10 @@
-﻿<Controls:MetroWindow x:Class="SchetsPlus.MainWindow"
+﻿<Controls:MetroWindow x:Class="SchetsPlus.SchetsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
-        Title="Schets+" Height="600" Width="750" LocationChanged="MetroWindow_LocationChanged_1" Activated="MetroWindow_Activated_1" WindowStartupLocation="CenterScreen" HorizontalAlignment="Center" VerticalAlignment="Center" Deactivated="MetroWindow_Deactivated_1" Closing="MetroWindow_Closing_1" SizeChanged="MetroWindow_SizeChanged_1">
+        Title="Schets+" Height="700" Width="750" LocationChanged="MetroWindow_LocationChanged_1" Activated="MetroWindow_Activated_1" WindowStartupLocation="CenterScreen" HorizontalAlignment="Center" VerticalAlignment="Center" Deactivated="MetroWindow_Deactivated_1" Closing="MetroWindow_Closing_1" SizeChanged="MetroWindow_SizeChanged_1">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,6 +18,11 @@
     </Window.Resources>
 
     <TabControl x:Name="tabControl" SelectionChanged="tabControl_SelectionChanged">
+        <TabControl.ContextMenu>
+            <ContextMenu >
+                <MenuItem Header="Open in new window" Click="MenuItem_Click_1" />
+            </ContextMenu>
+        </TabControl.ContextMenu>
     </TabControl>
 
     <Controls:MetroWindow.WindowCommands>

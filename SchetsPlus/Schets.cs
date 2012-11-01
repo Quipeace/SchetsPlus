@@ -9,13 +9,15 @@ namespace SchetsPlus
     {
         private Bitmap bitmap;
         public Size imageSize;
-        public double ratio;
+        public double imageRatio;
+        public string imageName;
 
-        public Schets(Size imageSize)
+        public Schets(string name, Size imageSize)
         {
+            this.imageName = name;
             this.imageSize = imageSize;
-            this.ratio = (double) imageSize.Width / (double) imageSize.Height;
-            bitmap = new Bitmap(imageSize.Width, imageSize.Height);
+            this.imageRatio = (double) imageSize.Width / (double) imageSize.Height;
+            this.bitmap = new Bitmap(imageSize.Width, imageSize.Height);
         }
         public Graphics BitmapGraphics
         {

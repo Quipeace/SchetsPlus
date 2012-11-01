@@ -36,9 +36,13 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                
-                <Button Grid.Row="0" Content="Pen" Height="68" Width="68" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <Button Grid.Row="0" Content="Line" Height="68" Width="68" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1"/>
+                <ToggleButton x:Name="btPen" Grid.Row="0" Content="Pen" Height="68" Width="68" HorizontalAlignment="Center" VerticalAlignment="Center" Click="toolButton_Click"/>
+                <ToggleButton x:Name="btLine" Grid.Row="0" Content="Line" Height="68" Width="68" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Click="toolButton_Click"/>
+                <ToggleButton x:Name="btRect" Grid.Row="1" Content="Rect." Height="68" Width="68" HorizontalAlignment="Center" VerticalAlignment="Center" Click="toolButton_Click"/>
+                <ToggleButton x:Name="btFillRect" Grid.Row="1" Content="Fill. Rect." Height="68" Width="68" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Click="toolButton_Click"/>
+                <ToggleButton x:Name="btEllipse" Grid.Row="2" Content="Ellip." Height="68" Width="68" HorizontalAlignment="Center" VerticalAlignment="Center" Click="toolButton_Click"/>
+                <ToggleButton x:Name="btFillEllipse" Grid.Row="2" Content="Fill. Ellip." Height="68" Width="68" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Click="toolButton_Click"/>
+                <ToggleButton x:Name="btEraser" Grid.Row="3" Content="Eraser" Height="68" Width="68" HorizontalAlignment="Center" VerticalAlignment="Center" Click="toolButton_Click"/>
             </Grid>
         </TabItem>
         <TabItem Header="Settings">

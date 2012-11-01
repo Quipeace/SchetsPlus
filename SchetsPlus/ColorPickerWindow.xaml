@@ -1,7 +1,8 @@
 ﻿<Controls:MetroWindow x:Class="SchetsPlus.ColorPickerWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="" Height="300" Width="300"
+        Title="" Height="300" Width="380
+                      "
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro">
 
     <Window.Resources>
@@ -12,18 +13,33 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Green.xaml" />
                 <ResourceDictionary Source="Styles/BaseLightGray.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
 
     <TabControl >
         <TabItem Header="Colors">
+            <Grid Margin="0,-20,0,20">
+                <Image Width="200" Source="Resources/colorwheel.png" HorizontalAlignment="Left" Margin="15,25,0,0">
+                </Image>
+                <Slider x:Name="sliderRed" HorizontalAlignment="Right" Width="76" Height="25" VerticalAlignment="Top" Margin="0,28,55,0" Maximum="255" ValueChanged="sliderRed_ValueChanged" />
+                <Slider x:Name="sliderGreen" HorizontalAlignment="Right" Width="75" Height="25" VerticalAlignment="Top" Margin="0,58,55,0" Maximum="255" ValueChanged="sliderGreen_ValueChanged" />
+                <Slider x:Name="sliderBlue" HorizontalAlignment="Right" Width="75" Height="25" VerticalAlignment="Top" Margin="0,89,55,0" Maximum="255" ValueChanged="sliderBlue_ValueChanged" />
+                <TextBlock HorizontalAlignment="Left" Margin="215,31,0,0" TextWrapping="Wrap" Text="R" VerticalAlignment="Top" Height="20" Width="17" TextAlignment="Center"/>
+                <TextBlock HorizontalAlignment="Left" Margin="215,62,0,0" TextWrapping="Wrap" Text="G" VerticalAlignment="Top" Height="20" Width="17" TextAlignment="Center"/>
+                <TextBlock HorizontalAlignment="Left" Margin="215,93,0,0" TextWrapping="Wrap" Text="B" VerticalAlignment="Top" Height="20" Width="17" TextAlignment="Center" RenderTransformOrigin="0.412,1.5"/>
+                <TextBox x:Name="tbRed" HorizontalAlignment="Left" Height="23" Margin="330,27,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="32"/>
+                <TextBox x:Name="tbGreen" HorizontalAlignment="Left" Height="23" Margin="330,58,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="32"/>
+                <TextBox x:Name="tbBlue" HorizontalAlignment="Left" Height="23" Margin="330,89,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="32"/>
+                <Canvas x:Name="cvSecondaryColor" HorizontalAlignment="Left" Height="50" Margin="263,168,0,0" VerticalAlignment="Top" Width="50" Background="#FF4AD32C" MouseUp="cvSecondaryColor_MouseUp"/>
+                <TextBox x:Name="tbHexColor" HorizontalAlignment="Left" Height="23" Margin="237,120,0,0" TextWrapping="Wrap" Text="#FFFFFF" VerticalAlignment="Top" Width="125" TextChanged="tbHexColor_TextChanged"/>
+                <Canvas x:Name="cvPrimaryColor" HorizontalAlignment="Left" Height="50" Margin="238,151,0,0" VerticalAlignment="Top" Width="50" Background="Black"/>
+            </Grid>
+        </TabItem>
+        <TabItem Header="More">
 
         </TabItem>
-        <TabItem Header="Settings">
-
-        </TabItem>
-
     </TabControl>
 
     <Controls:MetroWindow.WindowCommands>
