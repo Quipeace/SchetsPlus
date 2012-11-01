@@ -24,7 +24,6 @@ using System.Windows.Shapes;
 
 namespace SchetsPlus
 {
-
     public partial class ToolsWindow : MetroWindow
     {
         private MainWindow mainWindow;

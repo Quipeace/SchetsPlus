@@ -1,9 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2012 for Windows Desktop
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchetsPlus", "SchetsPlus.csproj", "{A3883C3F-1339-4212-84A0-EA3BBCF80085}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchetsEditor", "..\SchetsEditor\SchetsEditor.csproj", "{8F81CD5E-F6A9-41CE-8E37-20C7280949E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,16 +23,6 @@ Global
 		{A3883C3F-1339-4212-84A0-EA3BBCF80085}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{A3883C3F-1339-4212-84A0-EA3BBCF80085}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A3883C3F-1339-4212-84A0-EA3BBCF80085}.Release|x86.ActiveCfg = Release|Any CPU
-		{8F81CD5E-F6A9-41CE-8E37-20C7280949E4}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{8F81CD5E-F6A9-41CE-8E37-20C7280949E4}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{8F81CD5E-F6A9-41CE-8E37-20C7280949E4}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{8F81CD5E-F6A9-41CE-8E37-20C7280949E4}.Debug|x86.ActiveCfg = Debug|x86
-		{8F81CD5E-F6A9-41CE-8E37-20C7280949E4}.Debug|x86.Build.0 = Debug|x86
-		{8F81CD5E-F6A9-41CE-8E37-20C7280949E4}.Release|Any CPU.ActiveCfg = Release|x86
-		{8F81CD5E-F6A9-41CE-8E37-20C7280949E4}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{8F81CD5E-F6A9-41CE-8E37-20C7280949E4}.Release|Mixed Platforms.Build.0 = Release|x86
-		{8F81CD5E-F6A9-41CE-8E37-20C7280949E4}.Release|x86.ActiveCfg = Release|x86
-		{8F81CD5E-F6A9-41CE-8E37-20C7280949E4}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

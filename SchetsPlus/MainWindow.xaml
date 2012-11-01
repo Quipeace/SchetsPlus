@@ -13,7 +13,6 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
                 <ResourceDictionary Source="Styles/BaseLightGray.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -23,7 +22,24 @@
 
     <Controls:MetroWindow.WindowCommands>
         <Controls:WindowCommands>
-            <Button x:Name="btAdd" Content="add" Click="btAdd_Click" />
+            
+            <Menu x:Name="menu">
+                <MenuItem Header="File" FontSize="12" Height="30" Background="#FF3EAEDE" Foreground="#FFF7F7F7"> 
+                    <MenuItem x:Name="button_new" Header="New..." Click="button_new_Click" />
+                    <MenuItem Header="Save" />
+                    <MenuItem Header="Save As..." />
+                </MenuItem>
+                <MenuItem Header="Image" FontSize="12" Height="32" Background="#FF3EAEDE" Foreground="#FFF7F7F7">
+                    <MenuItem Header="Resize Image" />
+                    <MenuItem Header="Modify Canvas" />
+                </MenuItem>
+                <MenuItem Header="Selection" FontSize="12" Height="30" Background="#FF3EAEDE" Foreground="#FFF7F7F7">
+                    <MenuItem Header="Rotate Selection" />
+                </MenuItem>
+                <MenuItem Header="Help" FontSize="12" Height="30" Background="#FF3EAEDE" Foreground="#FFF7F7F7">
+                    <MenuItem Header="About" />
+                </MenuItem>
+            </Menu>
         </Controls:WindowCommands>
     </Controls:MetroWindow.WindowCommands>
 </Controls:MetroWindow>

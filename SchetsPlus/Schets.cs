@@ -10,7 +10,7 @@ namespace SchetsPlus
         private Bitmap bitmap;
         public Size imageSize;
         public double ratio;
-        
+
         public Schets(Size imageSize)
         {
             this.imageSize = imageSize;
@@ -24,6 +24,10 @@ namespace SchetsPlus
 
         public void VeranderAfmeting(Size sz)
         {
+            if (bitmap is Bitmap)
+            {
+
+            }
             //TODO canvas resize
         }
         public void Teken(Graphics gr, int width, int height)

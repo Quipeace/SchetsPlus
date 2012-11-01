@@ -145,7 +145,7 @@ namespace SchetsPlus
             MetroWindow_SizeChanged_1(null, null);
         }
 
-        private void btAdd_Click(object sender, RoutedEventArgs e)
+        private void button_new_Click(object sender, RoutedEventArgs e)
         {
             addNewSchets();
         }
