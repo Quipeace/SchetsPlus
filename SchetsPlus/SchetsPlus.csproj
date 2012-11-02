@@ -63,8 +63,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Action.cs" />
     <Compile Include="ColorPickerWindow.xaml.cs">
       <DependentUpon>ColorPickerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\CanvasSizeDialog.xaml.cs">
+      <DependentUpon>CanvasSizeDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\ResizeDialog.xaml.cs">
+      <DependentUpon>ResizeDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="HistoryWindow.xaml.cs">
       <DependentUpon>HistoryWindow.xaml</DependentUpon>
@@ -78,6 +85,14 @@
       <DependentUpon>ToolsWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="ColorPickerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\CanvasSizeDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\ResizeDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

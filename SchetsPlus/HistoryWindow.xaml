@@ -20,6 +20,8 @@
 
     <TabControl >
         <TabItem Header="History">
+
+            <ListBox x:Name="lvHistory" HorizontalAlignment="Left" Height="218" VerticalAlignment="Top" Width="273" Background="#FF8B3A3A" SelectionChanged="lvHistory_SelectionChanged" Margin="15,0,0,0"/>
         </TabItem>
     </TabControl>
 

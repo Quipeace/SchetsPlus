@@ -25,6 +25,7 @@ namespace SchetsPlus
                                        , new FillEllipseTool()
                                        , new TekstTool()
                                        , new GumTool()
+                                       , new FancyEraser()
                                        };
     }
 }

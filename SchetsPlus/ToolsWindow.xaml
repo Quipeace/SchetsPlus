@@ -43,10 +43,13 @@
                 <ToggleButton x:Name="btEllipse" Grid.Row="2" Content="Ellip." Height="68" Width="68" HorizontalAlignment="Center" VerticalAlignment="Center" Click="toolButton_Click"/>
                 <ToggleButton x:Name="btFillEllipse" Grid.Row="2" Content="Fill. Ellip." Height="68" Width="68" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Click="toolButton_Click"/>
                 <ToggleButton x:Name="btEraser" Grid.Row="3" Content="Eraser" Height="68" Width="68" HorizontalAlignment="Center" VerticalAlignment="Center" Click="toolButton_Click"/>
+                <ToggleButton x:Name="btFancyEraser" Grid.Row="3" Content="Fancy Eraser" Height="68" Width="68" HorizontalAlignment="Center" VerticalAlignment="Center" Click="toolButton_Click" Margin="13,10" Grid.Column="1"/>
             </Grid>
         </TabItem>
         <TabItem Header="Settings">
-
+            <Grid >
+                <CheckBox IsThreeState="True" />
+            </Grid>
         </TabItem>
 
     </TabControl>

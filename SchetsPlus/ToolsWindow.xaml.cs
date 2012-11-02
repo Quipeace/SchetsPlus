@@ -10,6 +10,7 @@
 using MahApps.Metro.Controls;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -79,6 +80,7 @@ namespace SchetsPlus
             }
             else if (clickedButton.Name == "btFillRect")
             {
+                Debug.WriteLine("VOL RECHTHOEK");
                 App.currentSchetsWindow.currentSchetsControl.currentTool = App.availableTools[3];
             }
             else if (clickedButton.Name == "btEllipse")
@@ -92,10 +94,17 @@ namespace SchetsPlus
             else if (clickedButton.Name == "btText")
             {
                 App.currentSchetsWindow.currentSchetsControl.currentTool = App.availableTools[5];
+                //TODO action
             }
             else if (clickedButton.Name == "btEraser")
             {
                 App.currentSchetsWindow.currentSchetsControl.currentTool = App.availableTools[7];
+                //TODO action
+            }
+            else if (clickedButton.Name == "btFancyEraser")
+            {
+                App.currentSchetsWindow.currentSchetsControl.currentTool = App.availableTools[8];
+                //TODO action
             }
         }
     }

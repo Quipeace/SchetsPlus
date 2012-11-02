@@ -9,47 +9,64 @@ namespace SchetsPlus
 {
     public class SchetsControl : System.Windows.Forms.UserControl
     {
+        private Bitmap overlayBitmap;
+
         public ISchetsTool currentTool;
+        public Action currentAction;
 
-        private Boolean vast;
+        private Boolean muisVast;
         public Schets schets;
-        public Color penkleur;
+        public int lineThickness = 3;
 
-        public Color PenKleur 
-        {   
-            get 
-            {
-                return penkleur;
-            } 
+        public Graphics overlayBitmapGraphics
+        {
+            get { return Graphics.FromImage(overlayBitmap); }
         }
 
         public SchetsControl(string imageName)
         {
+            schets = new Schets(imageName, new Size(700, 500));
+
             currentTool = App.availableTools[0];
-            penkleur = Color.Black;
+            currentAction = new PenAction();
             
             this.DoubleBuffered = true;
-            this.schets = new Schets(imageName, new Size(700, 500));
+
 
             this.Paint += this.teken;
             this.Resize += this.veranderAfmeting;
 
             this.MouseDown += (object o, MouseEventArgs mea) =>
             {
-                vast = true;
-                currentTool.MuisVast(this, mea.Location);
+                muisVast = true;
+
+                Point translatedPoint = translateMouseCoordinates(mea.Location);
+
+                overlayBitmap = new Bitmap(schets.imageSize.Width, schets.imageSize.Height);
+                setAction();
+                currentAction.onMouseDown(this, translatedPoint.X, translatedPoint.Y, 3, schets.primaryColor);
+                currentAction.actionColor = schets.primaryColor;
+                currentTool.MuisVast(this, translatedPoint);
             };
             this.MouseMove += (object o, MouseEventArgs mea) =>
             {
-                if (vast)
+                if (muisVast)
                 {
-                    currentTool.MuisDrag(this, mea.Location);
+                    Point translatedPoint = translateMouseCoordinates(mea.Location);
+
+                    currentAction.onMouseMove(translatedPoint.X, translatedPoint.Y);
+                    currentTool.MuisDrag(this, translatedPoint);
                 }
             };
             this.MouseUp += (object o, MouseEventArgs mea) =>
             {
-                vast = false;
-                currentTool.MuisLos(this, mea.Location);
+                muisVast = false;
+
+                Point translatedPoint = translateMouseCoordinates(mea.Location);
+
+                currentAction.onMouseUp(translatedPoint.X, translatedPoint.Y);
+                currentTool.MuisLos(this, translatedPoint);
+                App.historyWindow.updateHistoryList();
             };
             this.KeyPress += (object o, KeyPressEventArgs kpea) =>
             {
@@ -58,24 +75,32 @@ namespace SchetsPlus
         }
 
         private void teken(object o, PaintEventArgs pea)
-        {   
-            schets.Teken(pea.Graphics, this.Size.Width, this.Size.Height);
+        {
+            schets.Teken(pea.Graphics, this.Width, this.Height);                    // Plaatje laten tekenen
+            if (muisVast)
+            {
+                pea.Graphics.DrawImage(overlayBitmap, 0, 0, this.Width, this.Height);         // Tekenen bitmap overlay (nieuwe actie terwijl muis muisVast)
+            }
         }
+
         private void veranderAfmeting(object o, EventArgs ea)
         {
             this.Invalidate();
         }
+
         public Graphics MaakBitmapGraphics()
         {   
             Graphics g = schets.BitmapGraphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
             return g;
         }
-        public Graphics MaakBitmapGraphics_Aliased()
+        public Graphics MaakOverlayBitmapGraphics()
         {
-            Graphics g = schets.BitmapGraphics;
+            Graphics g = this.overlayBitmapGraphics;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
             return g;
         }
+
         public void Schoon(object o, EventArgs ea)
         {   
             schets.Schoon();
@@ -85,6 +110,53 @@ namespace SchetsPlus
         {   
             schets.Roteer();
             this.veranderAfmeting(o, ea);
+        }
+        
+        public Point translateMouseCoordinates(Point mouseLocation)
+        {
+            double widthRatio = (double) schets.imageSize.Width / this.Width;
+            double heightRatio = (double)schets.imageSize.Height / this.Height;
+
+            int newMouseX = (int) (mouseLocation.X * widthRatio);
+            int newMouseY = (int) (mouseLocation.Y * heightRatio);
+
+            return new Point(newMouseX, newMouseY);
+        }
+
+        private void setAction()
+        {
+            if (currentTool is GumTool)
+            {
+                currentAction = new EraserAction();
+            }
+            else if (currentTool is PenTool)
+            {
+                currentAction = new PenAction();
+            }
+            else if (currentTool is LijnTool)
+            {
+                currentAction = new LineAction();
+            }
+            else if (currentTool is VolRechthoekTool)
+            {
+                currentAction = new FillRectangleAction();
+            }
+            else if (currentTool is RechthoekTool)
+            {
+                currentAction = new RectangleAction();
+            }
+            else if (currentTool is FillEllipseTool)
+            {
+                currentAction = new FillEllipseAction();
+            }
+            else if (currentTool is EllipseTool)
+            {
+                currentAction = new EllipseAction();
+            }
+            else if (currentTool is FancyEraser)
+            {
+                currentAction = new FancyEraserAction();
+            }
         }
     }
 }

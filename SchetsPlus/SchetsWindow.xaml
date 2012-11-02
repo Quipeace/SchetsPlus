@@ -18,11 +18,7 @@
     </Window.Resources>
 
     <TabControl x:Name="tabControl" SelectionChanged="tabControl_SelectionChanged">
-        <TabControl.ContextMenu>
-            <ContextMenu >
-                <MenuItem Header="Open in new window" Click="MenuItem_Click_1" />
-            </ContextMenu>
-        </TabControl.ContextMenu>
+
     </TabControl>
 
     <Controls:MetroWindow.WindowCommands>
@@ -30,16 +26,19 @@
             
             <Menu x:Name="menu">
                 <MenuItem Header="File" FontSize="12" Height="30" Background="#FF3EAEDE" Foreground="#FFF7F7F7"> 
-                    <MenuItem x:Name="button_new" Header="New..." Click="button_new_Click" />
-                    <MenuItem Header="Save" />
-                    <MenuItem Header="Save As..." />
+                    <MenuItem x:Name="mnNew" Header="New" Click="mnNew_Click"/>
+                    <MenuItem x:Name="mnOpen" Header="Open..." Click="mnOpen_Click" />
+                    <MenuItem x:Name="mnSave" Header="Save" Click="mnSave_Click" />
+                    <MenuItem x:Name="mnSaveAs" Header="Save As..." Click="mnSaveAs_Click" />
                 </MenuItem>
                 <MenuItem Header="Image" FontSize="12" Height="32" Background="#FF3EAEDE" Foreground="#FFF7F7F7">
                     <MenuItem Header="Resize Image" />
                     <MenuItem Header="Modify Canvas" />
                 </MenuItem>
-                <MenuItem Header="Selection" FontSize="12" Height="30" Background="#FF3EAEDE" Foreground="#FFF7F7F7">
-                    <MenuItem Header="Rotate Selection" />
+                <MenuItem Header="View" FontSize="12" Height="30" Background="#FF3EAEDE" Foreground="#FFF7F7F7">
+                    <MenuItem x:Name="mnTools" Header="Tools" Click="mnTools_Click" />
+                    <MenuItem x:Name="mnHistory" Header="History" Click="mnHistory_Click" />
+                    <MenuItem x:Name="mnColorpicker" Header="Colorpicker" Click="mnColorpicker_Click" />
                 </MenuItem>
                 <MenuItem Header="Help" FontSize="12" Height="30" Background="#FF3EAEDE" Foreground="#FFF7F7F7">
                     <MenuItem Header="About" />

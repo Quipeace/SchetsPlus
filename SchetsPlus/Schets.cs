@@ -1,16 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing;
 
 namespace SchetsPlus
 {
+    [Serializable]
     public class Schets
     {
-        private Bitmap bitmap;
+        [NonSerialized]
+        public Bitmap bitmap;
+
         public Size imageSize;
         public double imageRatio;
         public string imageName;
+        public string imagePath;
+
+        public int actionDrawLimit;
+
+        public Color primaryColor;
+        public Color secondaryColor;
+
+        public ObservableCollection<Action> actions = new ObservableCollection<Action>();
 
         public Schets(string name, Size imageSize)
         {
@@ -18,6 +30,9 @@ namespace SchetsPlus
             this.imageSize = imageSize;
             this.imageRatio = (double) imageSize.Width / (double) imageSize.Height;
             this.bitmap = new Bitmap(imageSize.Width, imageSize.Height);
+
+            primaryColor = Color.Black;
+            secondaryColor = Color.White;
         }
         public Graphics BitmapGraphics
         {
@@ -37,6 +52,17 @@ namespace SchetsPlus
             gr.Clear(Color.White);
             gr.DrawImage(bitmap, 0, 0, width, height);
         }
+
+        public void TekenFromActions(SchetsControl s)
+        {
+            Color tempPrimary = primaryColor;
+            for (int i = 0; i <= actionDrawLimit; i++)
+            {
+                actions[i].draw(s);
+            }
+            primaryColor = tempPrimary;
+        }
+
         public void Schoon()
         {
             Graphics gr = Graphics.FromImage(bitmap);
