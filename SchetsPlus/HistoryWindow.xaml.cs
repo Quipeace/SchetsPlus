@@ -59,7 +59,6 @@ namespace SchetsPlus
         private void lvHistory_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             App.currentSchetsWindow.currentSchetsControl.schets.actionDrawLimit = lvHistory.SelectedIndex;
-            App.currentSchetsWindow.currentSchetsControl.Schoon();
             App.currentSchetsWindow.currentSchetsControl.schets.TekenFromActions(App.currentSchetsWindow.currentSchetsControl);
         }
     }

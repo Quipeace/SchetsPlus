@@ -62,26 +62,37 @@ namespace SchetsPlus
 
         public void TekenFromActions(SchetsControl s)
         {
-            Color tempPrimary = primaryColor;
+            Debug.WriteLine("ACTION-BASED REDRAW");
 
-            for (int n = actionDrawLimit + 1; n < actions.Count; n++)
-            {
-                if (actions[n] is FancyEraserAction)
-                {
-                    ((FancyEraserAction)actions[n]).erasedAction.drawAction = true;
-                }
-            }
+            Color tempPrimary = primaryColor;
+            App.currentSchetsWindow.currentSchetsControl.Schoon();
 
             for (int i = 0; i <= actionDrawLimit && i < actions.Count; i++)
             {
-                s.currentAction = actions[i];
-
-                if (actions[i].drawAction)
+                if (actions[i] is FancyEraserAction)
                 {
+                    s.currentAction = actions[i];
+
+                    ((FancyEraserAction)actions[i]).draw(s);
+                }
+            }
+            for (int i = actionDrawLimit + 1; i < actions.Count; i++)
+            {
+                if (actions[i] is FancyEraserAction)
+                {
+                    ((FancyEraserAction)actions[i]).erasedAction.drawAction = true;
+                }
+            }
+            for (int i = 0; i <= actionDrawLimit && i < actions.Count; i++)
+            {
+                if (!(actions[i] is FancyEraserAction) && actions[i].drawAction)
+                {
+
+                    s.currentAction = actions[i];
+
                     actions[i].draw(s);
                 }
             }
-            primaryColor = tempPrimary;
         }
 
         public void Schoon()
