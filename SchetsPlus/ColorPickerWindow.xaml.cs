@@ -33,7 +33,7 @@ namespace SchetsPlus
             isPinned = !isPinned;
             if (isPinned)
             {
-                App.currentSchetsWindow.pinColorPicker();
+                App.currentSchetsWindow.pinColorPickerWindow();
             }
         }
 

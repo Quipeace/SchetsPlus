@@ -20,7 +20,15 @@ namespace SchetsPlus
 
         public Graphics overlayBitmapGraphics
         {
-            get { return Graphics.FromImage(overlayBitmap); }
+            get 
+            {
+                if (overlayBitmap == null)
+                {
+                    overlayBitmap = new Bitmap(schets.imageSize.Width, schets.imageSize.Height);
+                }
+                return Graphics.FromImage(overlayBitmap); 
+            
+            }
         }
 
         public SchetsControl(string imageName)

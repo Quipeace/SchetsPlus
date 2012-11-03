@@ -36,7 +36,14 @@ namespace SchetsPlus
         }
         public Graphics BitmapGraphics
         {
-            get { return Graphics.FromImage(bitmap); }
+            get 
+            {
+                if (bitmap == null)
+                {
+                    this.bitmap = new Bitmap(imageSize.Width, imageSize.Height);
+                }
+                return Graphics.FromImage(bitmap); 
+            }
         }
 
         public void VeranderAfmeting(Size sz)
@@ -56,14 +63,12 @@ namespace SchetsPlus
         public void TekenFromActions(SchetsControl s)
         {
             Color tempPrimary = primaryColor;
-            App.currentSchetsWindow.currentSchetsControl.Schoon();
 
             for (int n = actionDrawLimit + 1; n < actions.Count; n++)
             {
                 if (actions[n] is FancyEraserAction)
                 {
                     ((FancyEraserAction)actions[n]).erasedAction.drawAction = true;
-                    Debug.WriteLine("RESTORING: " + ((FancyEraserAction)actions[n]).erasedAction);
                 }
             }
 
@@ -73,7 +78,6 @@ namespace SchetsPlus
 
                 if (actions[i].drawAction)
                 {
-                    Debug.WriteLine("DRAWING: " + actions[i]);
                     actions[i].draw(s);
                 }
             }

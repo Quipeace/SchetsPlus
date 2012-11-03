@@ -32,40 +32,35 @@ namespace SchetsPlus
             isPinned = !isPinned;
             if (isPinned)
             {
-                App.currentSchetsWindow.pinTools();
+                App.currentSchetsWindow.pinToolsWindow();
             }
         }
 
         public void updateHistoryList()
         {
-            int i = App.currentSchetsWindow.currentSchetsControl.schets.actionDrawLimit + 1; 
-            while(i <= App.currentSchetsWindow.currentSchetsControl.schets.actions.Count() - 2)
+            try     // Catch NullPointerException that occurs when the history window isn't showing or currentSchetsControl hasn't been set yet.
             {
-                App.currentSchetsWindow.currentSchetsControl.schets.actions.RemoveAt(App.currentSchetsWindow.currentSchetsControl.schets.actionDrawLimit + 1);
-            }
+                int i = App.currentSchetsWindow.currentSchetsControl.schets.actionDrawLimit + 1;
+                while (i <= App.currentSchetsWindow.currentSchetsControl.schets.actions.Count() - 2)
+                {
+                    App.currentSchetsWindow.currentSchetsControl.schets.actions.RemoveAt(App.currentSchetsWindow.currentSchetsControl.schets.actionDrawLimit + 1);
+                }
 
-            lvHistory.ItemsSource = App.currentSchetsWindow.currentSchetsControl.schets.actions;
-            lvHistory.SelectedIndex = App.currentSchetsWindow.currentSchetsControl.schets.actions.Count() - 1;
-            if (lvHistory.SelectedIndex != -1)
-            {
-                lvHistory.ScrollIntoView(App.currentSchetsWindow.currentSchetsControl.schets.actions[lvHistory.SelectedIndex]);
+                lvHistory.ItemsSource = App.currentSchetsWindow.currentSchetsControl.schets.actions;
+                lvHistory.SelectedIndex = App.currentSchetsWindow.currentSchetsControl.schets.actions.Count() - 1;
+                if (lvHistory.SelectedIndex != -1)
+                {
+                    lvHistory.ScrollIntoView(App.currentSchetsWindow.currentSchetsControl.schets.actions[lvHistory.SelectedIndex]);
+                }
             }
+            catch (NullReferenceException) { }
         }
 
-        int previousSelection = 0;
         private void lvHistory_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             App.currentSchetsWindow.currentSchetsControl.schets.actionDrawLimit = lvHistory.SelectedIndex;
-            //if (lvHistory.SelectedIndex != App.currentSchetsWindow.currentSchetsControl.schets.actions.Count() - 1 || lvHistory.SelectedIndex - previousSelection >= 1)
-            //{
-            Debug.WriteLine("SELECTION CHANGED, REDRAW");
-                App.currentSchetsWindow.currentSchetsControl.schets.TekenFromActions(App.currentSchetsWindow.currentSchetsControl);
-            //}
-            //else 
-            //{
-                //App.currentSchetsWindow.currentSchetsControl.schets.actions[lvHistory.SelectedIndex].draw(App.currentSchetsWindow.currentSchetsControl);
-            //}
-            previousSelection = lvHistory.SelectedIndex;
+            App.currentSchetsWindow.currentSchetsControl.Schoon();
+            App.currentSchetsWindow.currentSchetsControl.schets.TekenFromActions(App.currentSchetsWindow.currentSchetsControl);
         }
     }
 }

@@ -58,7 +58,7 @@ namespace SchetsPlus
             isPinned = !isPinned;
             if (isPinned)
             {
-                App.currentSchetsWindow.pinTools();
+                App.currentSchetsWindow.pinToolsWindow();
             }
         }
 

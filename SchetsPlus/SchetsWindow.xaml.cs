@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows;
@@ -81,6 +82,7 @@ namespace SchetsPlus
             newItem.ContextMenu = ctxMenu;
 
             tabItems.Add(newItem);
+            tabControl.SelectedIndex = tabItems.Count - 1;
         }
 
         private void MetroWindow_LocationChanged_1(object sender, EventArgs e)
@@ -114,6 +116,7 @@ namespace SchetsPlus
             {
                 App.historyWindow.Show();
                 App.historyWindow.Topmost = true;
+                App.historyWindow.updateHistoryList();
             }
             catch (Exception)
             {
@@ -169,23 +172,23 @@ namespace SchetsPlus
         {
             if (App.toolsWindow.isPinned)
             {
-                pinTools();
+                pinToolsWindow();
             }
             if (App.colorPickerWindow.isPinned)
             {
-                pinColorPicker();
+                pinColorPickerWindow();
             }
             if (App.historyWindow.isPinned)
             {
                 pinHistoryWindow();
             }
         }
-        public void pinTools()          // If pinned, pin relative to the currently active (this) window.
+        public void pinToolsWindow()    // If pinned, pin relative to the currently active (this) window.
         {
             App.toolsWindow.Top = this.Top;
             App.toolsWindow.Left = this.Left - App.toolsWindow.Width - 1;
         }
-        public void pinColorPicker()    // Idem
+        public void pinColorPickerWindow()    // Idem
         {
             App.colorPickerWindow.Top = this.Top + this.Height - App.colorPickerWindow.Height;
             App.colorPickerWindow.Left = this.Left + this.Width + 1;
@@ -203,36 +206,50 @@ namespace SchetsPlus
                 currentSchetsControl = schetsControls[tabControl.SelectedIndex];
                 MetroWindow_SizeChanged_1(null, null);
                 App.colorPickerWindow.refreshColors();
+                App.historyWindow.updateHistoryList();
             }
         }
-
 
         private void mnNew_Click(object sender, RoutedEventArgs e)
         {
             addNewSchets();
         }
 
-
         private void mnTools_Click(object sender, RoutedEventArgs e)        // Clicked on "tools" entry under view, show new tools menu
         {                                                                   // in case it's been closed
+            try
+            {
+                App.toolsWindow.Close();
+            }
+            catch(Exception){}
             App.toolsWindow = new ToolsWindow();
             App.toolsWindow.isPinned = true;
             App.toolsWindow.Show();
-            pinTools();
+            pinToolsWindow();
         }
         private void mnHistory_Click(object sender, RoutedEventArgs e)      // Idem for other optional windows
         {
+            try
+            {
+                App.historyWindow.Close();
+            }
+            catch (Exception) { }
             App.historyWindow = new HistoryWindow();
             App.historyWindow.isPinned = true;
             App.historyWindow.Show();
-            pinTools();
+            pinHistoryWindow();
         }
         private void mnColorpicker_Click(object sender, RoutedEventArgs e)  // That
         {
+            try
+            {
+                App.colorPickerWindow.Close();
+            }
+            catch (Exception) { }
             App.colorPickerWindow = new ColorPickerWindow();
             App.colorPickerWindow.isPinned = true;
             App.colorPickerWindow.Show();
-            pinTools();
+            pinColorPickerWindow();
         }
 
         private void mnCloseTab_Click(object sender, RoutedEventArgs e)
@@ -250,6 +267,7 @@ namespace SchetsPlus
             }
             tabItems.Remove((TabItem) sendingItem.Tag);
         }
+
         void mnTabInWindow_Click(object sender, RoutedEventArgs e)
         {
             MenuItem sendingItem = (MenuItem)sender;
@@ -280,7 +298,16 @@ namespace SchetsPlus
                 Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
                 dlg.FileName = currentSchetsControl.schets.imageName; // Default file name
                 dlg.DefaultExt = ".schep";
-                dlg.Filter = "SchetsPlus Image (.schep)|*.schep";
+                dlg.Filter = "SchetsPlus Image (.schep)|*.schep|" + 
+                             "BMP (*.bmp)|*.bmp|"+
+                             "EMF (*.emf)|*.emf|"+
+                             "GIF (*.gif)|*.gif|" +
+                             "ICO (*.ico)|*.ico|" +
+                             "JPEG (*.jpg)|*.jpg|" +
+                             "PNG (*.png)|*.png|" +
+                             "TIFF (*.tif)|*.tif|" +
+                             "WMF (*.wmf)|*.wmf|" +
+                             "All Files (*.*)|*.*";
                 save = (bool)dlg.ShowDialog();
                 if (save)
                 {
@@ -307,16 +334,41 @@ namespace SchetsPlus
                 {
                     if(currentSchetsControl.schets.imagePath.EndsWith(".bmp"))
                     {
-                        Stream stream = File.Open(currentSchetsControl.schets.imagePath, FileMode.Create);
-                        BinaryFormatter bFormatter = new BinaryFormatter();
-                        bFormatter.Serialize(stream, currentSchetsControl.schets.bitmap);
-                        stream.Close();
+                        currentSchetsControl.schets.bitmap.Save(currentSchetsControl.schets.imagePath, System.Drawing.Imaging.ImageFormat.Bmp);
+                    }
+                    else if (currentSchetsControl.schets.imagePath.EndsWith(".emf"))
+                    {
+                        currentSchetsControl.schets.bitmap.Save(currentSchetsControl.schets.imagePath, System.Drawing.Imaging.ImageFormat.Emf);
+                    }
+                    else if (currentSchetsControl.schets.imagePath.EndsWith(".gif"))
+                    {
+                        currentSchetsControl.schets.bitmap.Save(currentSchetsControl.schets.imagePath, System.Drawing.Imaging.ImageFormat.Gif);
+                    }
+                    else if (currentSchetsControl.schets.imagePath.EndsWith(".ico"))
+                    {
+                        currentSchetsControl.schets.bitmap.Save(currentSchetsControl.schets.imagePath, System.Drawing.Imaging.ImageFormat.Icon);
+                    }
+                    else if (currentSchetsControl.schets.imagePath.EndsWith(".jpg"))
+                    {
+                        currentSchetsControl.schets.bitmap.Save(currentSchetsControl.schets.imagePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    }
+                    else if (currentSchetsControl.schets.imagePath.EndsWith(".png"))
+                    {
+                        currentSchetsControl.schets.bitmap.Save(currentSchetsControl.schets.imagePath, System.Drawing.Imaging.ImageFormat.Png);
+                    }
+                    else if (currentSchetsControl.schets.imagePath.EndsWith(".tif"))
+                    {
+                        currentSchetsControl.schets.bitmap.Save(currentSchetsControl.schets.imagePath, System.Drawing.Imaging.ImageFormat.Tiff);
+                    }
+                    else if (currentSchetsControl.schets.imagePath.EndsWith(".wmf"))
+                    {
+                        currentSchetsControl.schets.bitmap.Save(currentSchetsControl.schets.imagePath, System.Drawing.Imaging.ImageFormat.Wmf);
                     }
                     else
                     {
                         Stream stream = File.Open(currentSchetsControl.schets.imagePath, FileMode.Create);
-                        BinaryFormatter bFormatter = new BinaryFormatter();
-                        bFormatter.Serialize(stream, currentSchetsControl.schets);
+                        BinaryFormatter formatter = new BinaryFormatter();
+                        formatter.Serialize(stream, currentSchetsControl.schets);
                         stream.Close();
                     }
                 }
@@ -329,7 +381,47 @@ namespace SchetsPlus
 
         private void mnOpen_Click(object sender, RoutedEventArgs e)
         {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.DefaultExt = ".schep";
+            dlg.Filter = "SchetsPlus Image (.schep)|*.schep|" +
+                         "BMP (*.bmp)|*.bmp|" +
+                         "EMF (*.emf)|*.emf|" +
+                         "GIF (*.gif)|*.gif|" +
+                         "ICO (*.ico)|*.ico|" +
+                         "JPEG (*.jpg)|*.jpg|" +
+                         "PNG (*.png)|*.png|" +
+                         "TIFF (*.tif)|*.tif|" +
+                         "WMF (*.wmf)|*.wmf|" +
+                         "All Files (*.*)|*.*";
 
+            // Show open file dialog box 
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process open file dialog box results 
+            if (result == true)
+            {
+                String newImagePath = dlg.FileName;
+                if(currentSchetsControl.schets.actions.Count != 0)
+                {
+                    addNewSchets();
+                }
+
+                if (newImagePath.EndsWith(".schep"))
+                {
+                    Stream stream = File.OpenRead(newImagePath);
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    currentSchetsControl.schets = (Schets)formatter.Deserialize(stream);
+                    stream.Close();
+
+                    currentSchetsControl.schets.TekenFromActions(currentSchetsControl);
+                }
+                else
+                {
+                    currentSchetsControl.schets.bitmap = new Bitmap(newImagePath);
+                }
+
+                currentSchetsControl.schets.imagePath = newImagePath;
+            }
         }
     }
 }
