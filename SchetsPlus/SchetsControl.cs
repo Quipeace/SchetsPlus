@@ -64,8 +64,11 @@ namespace SchetsPlus
 
                 Point translatedPoint = translateMouseCoordinates(mea.Location);
 
-                currentAction.onMouseUp(translatedPoint.X, translatedPoint.Y);
                 currentTool.MuisLos(this, translatedPoint);
+                if (currentAction != null)
+                {
+                    currentAction.onMouseUp(translatedPoint.X, translatedPoint.Y);
+                }
                 App.historyWindow.updateHistoryList();
             };
             this.KeyPress += (object o, KeyPressEventArgs kpea) =>
@@ -76,10 +79,10 @@ namespace SchetsPlus
 
         private void teken(object o, PaintEventArgs pea)
         {
-            schets.Teken(pea.Graphics, this.Width, this.Height);                    // Plaatje laten tekenen
+            schets.Teken(pea.Graphics, this.Width, this.Height);                        // Plaatje laten tekenen
             if (muisVast)
             {
-                pea.Graphics.DrawImage(overlayBitmap, 0, 0, this.Width, this.Height);         // Tekenen bitmap overlay (nieuwe actie terwijl muis muisVast)
+                pea.Graphics.DrawImage(overlayBitmap, 0, 0, this.Width, this.Height);   // Tekenen bitmap overlay (nieuwe actie terwijl muis muisVast)
             }
         }
 
@@ -101,7 +104,7 @@ namespace SchetsPlus
             return g;
         }
 
-        public void Schoon(object o, EventArgs ea)
+        public void Schoon()
         {   
             schets.Schoon();
             this.Invalidate();

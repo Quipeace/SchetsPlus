@@ -46,22 +46,25 @@ namespace SchetsPlus
 
             lvHistory.ItemsSource = App.currentSchetsWindow.currentSchetsControl.schets.actions;
             lvHistory.SelectedIndex = App.currentSchetsWindow.currentSchetsControl.schets.actions.Count() - 1;
-            lvHistory.ScrollIntoView(App.currentSchetsWindow.currentSchetsControl.schets.actions[lvHistory.SelectedIndex]);
+            if (lvHistory.SelectedIndex != -1)
+            {
+                lvHistory.ScrollIntoView(App.currentSchetsWindow.currentSchetsControl.schets.actions[lvHistory.SelectedIndex]);
+            }
         }
 
         int previousSelection = 0;
         private void lvHistory_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             App.currentSchetsWindow.currentSchetsControl.schets.actionDrawLimit = lvHistory.SelectedIndex;
-            if (lvHistory.SelectedIndex != App.currentSchetsWindow.currentSchetsControl.schets.actions.Count() - 1 || lvHistory.SelectedIndex - previousSelection >= 1)
-            {
-                App.currentSchetsWindow.currentSchetsControl.schets.Schoon();
+            //if (lvHistory.SelectedIndex != App.currentSchetsWindow.currentSchetsControl.schets.actions.Count() - 1 || lvHistory.SelectedIndex - previousSelection >= 1)
+            //{
+            Debug.WriteLine("SELECTION CHANGED, REDRAW");
                 App.currentSchetsWindow.currentSchetsControl.schets.TekenFromActions(App.currentSchetsWindow.currentSchetsControl);
-            }
-            else 
-            {
-                App.currentSchetsWindow.currentSchetsControl.schets.actions[lvHistory.SelectedIndex].draw(App.currentSchetsWindow.currentSchetsControl);
-            }
+            //}
+            //else 
+            //{
+                //App.currentSchetsWindow.currentSchetsControl.schets.actions[lvHistory.SelectedIndex].draw(App.currentSchetsWindow.currentSchetsControl);
+            //}
             previousSelection = lvHistory.SelectedIndex;
         }
     }

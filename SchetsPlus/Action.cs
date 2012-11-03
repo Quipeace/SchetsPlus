@@ -11,6 +11,7 @@ namespace SchetsPlus
     [Serializable]
     public abstract class Action
     {
+        public bool drawAction = true;
         public int lineThickness = 3;
         public Color actionColor;
 
@@ -30,12 +31,9 @@ namespace SchetsPlus
 
         public void onMouseUp(int x, int y)
         {
-            if (App.currentSchetsWindow.currentSchetsControl.currentAction != null)
-            {
-                App.currentSchetsWindow.currentSchetsControl.currentAction.endPoint[0] = x;
-                App.currentSchetsWindow.currentSchetsControl.currentAction.endPoint[1] = y;
-                App.currentSchetsWindow.currentSchetsControl.schets.actions.Add(App.currentSchetsWindow.currentSchetsControl.currentAction);
-            }
+            App.currentSchetsWindow.currentSchetsControl.currentAction.endPoint[0] = x;
+            App.currentSchetsWindow.currentSchetsControl.currentAction.endPoint[1] = y;
+            App.currentSchetsWindow.currentSchetsControl.schets.actions.Add(App.currentSchetsWindow.currentSchetsControl.currentAction);
         }
 
         public abstract bool isInClick(int x, int y);
@@ -108,18 +106,25 @@ namespace SchetsPlus
     [Serializable]
     public class FancyEraserAction : Action
     {
+        public Action erasedAction;
+
+        public override string ToString()
+        {
+            return "Object Eraser";
+        }
         public override void onMouseMove(int x, int y)
         {
         }
 
         public override void draw(SchetsControl s)
         {
+            App.availableTools[8].MuisVast(s, new Point(startPoint[0], startPoint[1]));
             App.availableTools[8].MuisLos(s, new Point(endPoint[0], endPoint[1]));
         }
 
         public override bool isInClick(int x, int y)
         {
-            return false; // Hier niets doen, je kan een fancyeraser niet op deze manier ongedaan maken
+            return false;
         }
     }
 

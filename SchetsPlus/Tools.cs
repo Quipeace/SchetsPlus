@@ -54,8 +54,6 @@ namespace SchetsPlus
 
     public abstract class TweepuntTool : StartpuntTool
     {
-        private Graphics overlayGraphics;
-
         public static Rectangle maakRechthoek(Point p1, Point p2)
         {   
             return new Rectangle( new Point(Math.Min(p1.X,p2.X), Math.Min(p1.Y,p2.Y)), new Size (Math.Abs(p1.X-p2.X), Math.Abs(p1.Y-p2.Y)));
@@ -71,21 +69,20 @@ namespace SchetsPlus
         public override void MuisVast(SchetsControl s, Point p)
         {  
             base.MuisVast(s, p);
-            overlayGraphics = s.MaakOverlayBitmapGraphics();
         }
         public override void MuisDrag(SchetsControl s, Point p)
         {
             base.MuisLos(s, p);
 
-            overlayGraphics.Clear(Color.Transparent);
-            this.Bezig(overlayGraphics, this.startpunt, p);
+            s.MaakOverlayBitmapGraphics().Clear(Color.Transparent);
+            this.Bezig(s.MaakOverlayBitmapGraphics(), this.startpunt, p);
             s.Invalidate();
         }
         public override void MuisLos(SchetsControl s, Point p)
         {   
             base.MuisLos(s, p);
 
-            overlayGraphics.Clear(Color.Transparent);
+            s.MaakOverlayBitmapGraphics().Clear(Color.Transparent);
             this.Bezig(s.MaakBitmapGraphics(), startpunt, p);
             s.Invalidate();
         }
@@ -160,14 +157,23 @@ namespace SchetsPlus
         public override void MuisLos(SchetsControl s, Point p)
         {
             base.MuisLos(s, p);
-            for (int i = s.schets.actions.Count - 1; i >= 0; i--)
+            Boolean hasErased = false;
+            for (int i = 0; i < s.schets.actions.Count; i++)
             {
                 if (s.schets.actions[i].isInClick(p.X, p.Y))
                 {
-                    s.schets.actions.RemoveAt(i);
+                    s.schets.actions[i].drawAction = false;
+                    Debug.WriteLine("ERASING: " + s.schets.actions[i]);
+                    ((FancyEraserAction)s.currentAction).erasedAction = s.schets.actions[i];
+                    hasErased = true;
                     break;
                 }
             }
+            if (!hasErased)
+            {
+                s.currentAction = null;
+            }
+
         }
 
         public override void MuisDrag(SchetsControl s, Point p) { }
