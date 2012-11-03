@@ -71,6 +71,13 @@ namespace SchetsPlus
         }
         public override bool isInClick(int x, int y)
         {
+            for (int i = 0; i < points.Count; i++)
+            {
+                if (((points[i][0] - 2 == x) || (points[i][0] - 1 == x) || (points[i][0] == x) || (points[i][0] + 1 == x) || (points[i][0] + 2 == x)) && ((points[i][1] - 2 == y) || (points[i][1] - 1 == y) || (points[i][1] == y) || (points[i][1] + 1 == y) || (points[i][1] + 2 == y)))
+                {
+                    return true;
+                }
+            }
             return false;
         }
     }
@@ -134,6 +141,59 @@ namespace SchetsPlus
         }
         public override bool isInClick(int x, int y)
         {
+            double avRaise = (double)(Math.Max(startPoint[1], endPoint[1]) - Math.Min(startPoint[1], endPoint[1])) / (double)(Math.Max(startPoint[0], endPoint[0]) - Math.Min(startPoint[0], endPoint[0]));
+            int xDiff = Math.Max(endPoint[0], startPoint[0]) - Math.Min(endPoint[0], startPoint[0]);
+            double yTotal = startPoint[1];
+            double xTotal = Math.Min(startPoint[0], endPoint[0]);
+
+            if (startPoint[0] < endPoint[0] && startPoint[1] > endPoint[1])
+            {
+                for (int i = 0; i <= xDiff; i++)
+                {
+                    yTotal = startPoint[1] - (avRaise * i);
+                    xTotal = Math.Min(startPoint[0], endPoint[0]) + i;
+                    if (((xTotal - 2 == x) || (xTotal - 1 == x) || (xTotal == x) || (xTotal + 1 == x) || (xTotal + 2 == x)) && (((int)(yTotal - 2) == y) || ((int)(yTotal - 1) == y) || ((int)(yTotal) == y) || ((int)(yTotal + 1) == y) || ((int)(yTotal + 2) == y)))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (startPoint[0] < endPoint[0] && startPoint[1] < endPoint[1])
+            {
+                for (int i = 0; i <= xDiff; i++)
+                {
+                    yTotal = startPoint[1] + (avRaise * i);
+                    xTotal = Math.Min(startPoint[0], endPoint[0]) + i;
+                    if (((xTotal - 2 == x) || (xTotal - 1 == x) || (xTotal == x) || (xTotal + 1 == x) || (xTotal + 2 == x)) && (((int)(yTotal - 2) == y) || ((int)(yTotal - 1) == y) || ((int)(yTotal) == y) || ((int)(yTotal + 1) == y) || ((int)(yTotal + 2) == y)))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (startPoint[0] > endPoint[0] && startPoint[1] > endPoint[1])
+            {
+                for (int i = xDiff; i >= 0; i--)
+                {
+                    yTotal = startPoint[1] - (avRaise * i);
+                    xTotal = startPoint[0] - i;
+                    if (((xTotal - 2 == x) || (xTotal - 1 == x) || (xTotal == x) || (xTotal + 1 == x) || (xTotal + 2 == x)) && (((int)(yTotal - 2) == y) || ((int)(yTotal - 1) == y) || ((int)(yTotal) == y) || ((int)(yTotal + 1) == y) || ((int)(yTotal + 2) == y)))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (startPoint[0] > endPoint[0] && startPoint[1] < endPoint[1])
+            {
+                for (int i = xDiff; i >= 0; i--)
+                {
+                    yTotal = startPoint[1] + (avRaise * i);
+                    xTotal = startPoint[0] - i;
+                    if (((xTotal - 2 == x) || (xTotal - 1 == x) || (xTotal == x) || (xTotal + 1 == x) || (xTotal + 2 == x)) && (((int)(yTotal - 2) == y) || ((int)(yTotal - 1) == y) || ((int)(yTotal) == y) || ((int)(yTotal + 1) == y) || ((int)(yTotal + 2) == y)))
+                    {
+                        return true;
+                    }
+                }
+            }
             return false;
         }
     }
@@ -156,6 +216,11 @@ namespace SchetsPlus
         }
         public override bool isInClick(int x, int y)
         {
+            //De +2 en -2 staan voor de lijndikte moeten nog aangepast worden denk ik
+            if ((x <= Math.Max(endPoint[0] + 2, startPoint[0] + 2) || x >= Math.Max(endPoint[0] - 2, startPoint[0] - 2)) && (Math.Min(endPoint[0] + 2, startPoint[0] + 2) <= x || x >= Math.Min(endPoint[0] - 2, startPoint[0] - 2)) && (y <= Math.Max(endPoint[1] + 2, startPoint[1] + 2) || y >= Math.Max(endPoint[1] - 2, startPoint[1] - 2)) && (Math.Min(endPoint[1] + 2, startPoint[1] + 2) <= y || Math.Min(endPoint[1] - 2, startPoint[1] - 2) >= y))
+            {
+                return true;
+            }
             return false;
         }
     }
@@ -178,6 +243,10 @@ namespace SchetsPlus
         }
         public override bool isInClick(int x, int y)
         {
+            if (x <= Math.Max(endPoint[0], startPoint[0]) && Math.Min(endPoint[0], startPoint[0]) <= x && y <= Math.Max(endPoint[1], startPoint[1]) && Math.Min(endPoint[1], startPoint[1]) <= y)
+            {
+                return true;
+            }
             return false;
         }
     }
@@ -200,6 +269,18 @@ namespace SchetsPlus
         }
         public override bool isInClick(int x, int y)
         {
+            double xRadius = ((Math.Max(endPoint[0], startPoint[0])) - (Math.Min(endPoint[0], startPoint[0]))) / 2;
+            double yRadius = ((Math.Max(endPoint[1], startPoint[1])) - (Math.Min(endPoint[1], startPoint[1]))) / 2;
+            double xMid = (endPoint[0] + startPoint[0]) / 2;
+            double yMid = (endPoint[1] + startPoint[1]) / 2;
+            double xEllipse = (((x - xMid) * (x - xMid)) / (xRadius * xRadius));
+            double yEllipse = (((y - yMid) * (y - yMid)) / (yRadius * yRadius));
+            double totalEllipse = xEllipse + yEllipse;
+            //De 0.9 en 1.1 staan voor de lijndikte weet niet hoe ik deze moet aanpassen :S
+            if (totalEllipse > 0.9 && totalEllipse < 1.1)
+            {
+                return true;
+            }
             return false;
         }
     }
@@ -222,6 +303,17 @@ namespace SchetsPlus
         }
         public override bool isInClick(int x, int y)
         {
+            double xRadius = ((Math.Max(endPoint[0], startPoint[0])) - (Math.Min(endPoint[0], startPoint[0]))) / 2;
+            double yRadius = ((Math.Max(endPoint[1], startPoint[1])) - (Math.Min(endPoint[1], startPoint[1]))) / 2;
+            double xMid = (endPoint[0] + startPoint[0]) / 2;
+            double yMid = (endPoint[1] + startPoint[1]) / 2;
+            double xEllipse = (((x - xMid) * (x - xMid)) / (xRadius * xRadius));
+            double yEllipse = (((y - yMid) * (y - yMid)) / (yRadius * yRadius));
+            double totalEllipse = xEllipse + yEllipse;
+            if (totalEllipse <= 1)
+            {
+                return true;
+            }
             return false;
         }
     }

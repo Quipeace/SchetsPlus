@@ -160,12 +160,11 @@ namespace SchetsPlus
         public override void MuisLos(SchetsControl s, Point p)
         {
             base.MuisLos(s, p);
-
-            for (int i = s.schets.actions.Count - 1; i > 0; i--)
+            for (int i = s.schets.actions.Count - 1; i >= 0; i--)
             {
                 if (s.schets.actions[i].isInClick(p.X, p.Y))
                 {
-                    // Er is op dit actionding geklikt, dus hij moet verwijderd worden
+                    s.schets.actions.RemoveAt(i);
                     break;
                 }
             }
