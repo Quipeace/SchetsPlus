@@ -221,10 +221,33 @@ namespace SchetsPlus
         }
         public override bool isInClick(int x, int y)
         {
-            //De +2 en -2 staan voor de lijndikte moeten nog aangepast worden denk ik
-            if ((x <= Math.Max(endPoint[0] + 2, startPoint[0] + 2) || x >= Math.Max(endPoint[0] - 2, startPoint[0] - 2)) && (Math.Min(endPoint[0] + 2, startPoint[0] + 2) <= x || x >= Math.Min(endPoint[0] - 2, startPoint[0] - 2)) && (y <= Math.Max(endPoint[1] + 2, startPoint[1] + 2) || y >= Math.Max(endPoint[1] - 2, startPoint[1] - 2)) && (Math.Min(endPoint[1] + 2, startPoint[1] + 2) <= y || Math.Min(endPoint[1] - 2, startPoint[1] - 2) >= y))
+            if (startPoint[0] < endPoint[0] && startPoint[1] > endPoint[1])
             {
-                return true;
+                if (((x <= endPoint[0] + 2 && x >= endPoint[0] - 2) && (y <= startPoint[1] && y >= endPoint[1])) || ((x >= startPoint[0] - 2 && x <= startPoint[0] + 2) && (y <= startPoint[1] && y >= endPoint[1])) || ((y >= startPoint[1] - 2 && y <= startPoint[1] + 2) && (x >= startPoint[0] && x <= endPoint[0])) || ((y >= endPoint[1] - 2 && y <= endPoint[1] + 2) && (x >= startPoint[0] && x <= endPoint[0])))
+                {
+                    return true;
+                }
+            }
+            if (startPoint[0] < endPoint[0] && startPoint[1] < endPoint[1])
+            {
+                if (((x <= endPoint[0] + 2 && x >= endPoint[0] - 2) && (y >= startPoint[1] && y <= endPoint[1])) || ((x >= startPoint[0] - 2 && x <= startPoint[0] + 2) && (y >= startPoint[1] && y <= endPoint[1])) || ((y >= startPoint[1] - 2 && y <= startPoint[1] + 2) && (x >= startPoint[0] && x <= endPoint[0])) || ((y >= endPoint[1] - 2 && y <= endPoint[1] + 2) && (x >= startPoint[0] && x <= endPoint[0])))
+                {
+                    return true;
+                }
+            }
+            if (startPoint[0] > endPoint[0] && startPoint[1] > endPoint[1])
+            {
+                if (((x <= endPoint[0] + 2 && x >= endPoint[0] - 2) && (y <= startPoint[1] && y >= endPoint[1])) || ((x >= startPoint[0] - 2 && x <= startPoint[0] + 2) && (y <= startPoint[1] && y >= endPoint[1])) || ((y >= startPoint[1] - 2 && y <= startPoint[1] + 2) && (x <= startPoint[0] && x >= endPoint[0])) || ((y >= endPoint[1] - 2 && y <= endPoint[1] + 2) && (x <= startPoint[0] && x >= endPoint[0])))
+                {
+                    return true;
+                }
+            }
+            if (startPoint[0] > endPoint[0] && startPoint[1] < endPoint[1])
+            {
+                if (((x <= endPoint[0] + 2 && x >= endPoint[0] - 2) && (y >= startPoint[1] && y <= endPoint[1])) || ((x >= startPoint[0] - 2 && x <= startPoint[0] + 2) && (y >= startPoint[1] && y <= endPoint[1])) || ((y >= startPoint[1] - 2 && y <= startPoint[1] + 2) && (x <= startPoint[0] && x >= endPoint[0])) || ((y >= endPoint[1] - 2 && y <= endPoint[1] + 2) && (x <= startPoint[0] && x >= endPoint[0])))
+                {
+                    return true;
+                }
             }
             return false;
         }
@@ -248,9 +271,33 @@ namespace SchetsPlus
         }
         public override bool isInClick(int x, int y)
         {
-            if (x <= Math.Max(endPoint[0], startPoint[0]) && Math.Min(endPoint[0], startPoint[0]) <= x && y <= Math.Max(endPoint[1], startPoint[1]) && Math.Min(endPoint[1], startPoint[1]) <= y)
+            if (startPoint[0] < endPoint[0] && startPoint[1] > endPoint[1])
             {
-                return true;
+                if (x <= endPoint[0] && x >= startPoint[0] && y <= startPoint[1] && y >= endPoint[1])
+                {
+                    return true;
+                }
+            }
+            if (startPoint[0] < endPoint[0] && startPoint[1] < endPoint[1])
+            { 
+                if (x <= endPoint[0] && x >= startPoint[0] && y <= endPoint[1] && y >= startPoint[1])
+                {
+                    return true;
+                }
+            }
+            if (startPoint[0] > endPoint[0] && startPoint[1] > endPoint[1])
+            {
+                if (x <= startPoint[0] && x >= endPoint[0] && y <= startPoint[1] && y >= endPoint[1])
+                {
+                    return true;
+                }
+            }
+            if (startPoint[0] > endPoint[0] && startPoint[1] < endPoint[1])
+            {
+                if (x <= startPoint[0] && x >= endPoint[0] && y <= endPoint[1] && y >= startPoint[1])
+                {
+                    return true;
+                }
             }
             return false;
         }
