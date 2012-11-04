@@ -18,6 +18,7 @@ namespace SchetsPlus
         public string imagePath;
 
         public int actionDrawLimit;
+        public int actionEraseLimit = -1;
 
         public Color primaryColor;
         public Color secondaryColor;
@@ -62,8 +63,6 @@ namespace SchetsPlus
 
         public void TekenFromActions(SchetsControl s)
         {
-            Debug.WriteLine("ACTION-BASED REDRAW");
-
             Color tempPrimary = primaryColor;
             App.currentSchetsWindow.currentSchetsControl.Schoon();
 
@@ -73,7 +72,9 @@ namespace SchetsPlus
                 {
                     s.currentAction = actions[i];
 
+                    s.schets.actionEraseLimit = i;
                     ((FancyEraserAction)actions[i]).draw(s);
+                    s.schets.actionEraseLimit = -1;
                 }
             }
             for (int i = actionDrawLimit + 1; i < actions.Count; i++)
@@ -85,11 +86,9 @@ namespace SchetsPlus
             }
             for (int i = 0; i <= actionDrawLimit && i < actions.Count; i++)
             {
-                if (!(actions[i] is FancyEraserAction) && actions[i].drawAction)
+                s.currentAction = actions[i];
+                if (actions[i].drawAction && !(actions[i] is FancyEraserAction))
                 {
-
-                    s.currentAction = actions[i];
-
                     actions[i].draw(s);
                 }
             }

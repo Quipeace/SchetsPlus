@@ -80,7 +80,6 @@ namespace SchetsPlus
             }
             else if (clickedButton.Name == "btFillRect")
             {
-                Debug.WriteLine("VOL RECHTHOEK");
                 App.currentSchetsWindow.currentSchetsControl.currentTool = App.availableTools[3];
             }
             else if (clickedButton.Name == "btEllipse")

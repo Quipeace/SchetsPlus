@@ -46,15 +46,16 @@ namespace SchetsPlus
 
             this.MouseDown += (object o, MouseEventArgs mea) =>
             {
+                Debug.WriteLine("MOUSEDOWN");
                 muisVast = true;
-
-                Point translatedPoint = translateMouseCoordinates(mea.Location);
 
                 overlayBitmap = new Bitmap(schets.imageSize.Width, schets.imageSize.Height);
                 setAction();
-                currentAction.onMouseDown(this, translatedPoint.X, translatedPoint.Y, 3, schets.primaryColor);
-                currentAction.actionColor = schets.primaryColor;
+
+                Point translatedPoint = translateMouseCoordinates(mea.Location);
+
                 currentTool.MuisVast(this, translatedPoint);
+                currentAction.onMouseDown(this, translatedPoint.X, translatedPoint.Y, 3, schets.primaryColor);
             };
             this.MouseMove += (object o, MouseEventArgs mea) =>
             {
@@ -62,12 +63,13 @@ namespace SchetsPlus
                 {
                     Point translatedPoint = translateMouseCoordinates(mea.Location);
 
-                    currentAction.onMouseMove(translatedPoint.X, translatedPoint.Y);
                     currentTool.MuisDrag(this, translatedPoint);
+                    currentAction.onMouseMove(translatedPoint.X, translatedPoint.Y);
                 }
             };
             this.MouseUp += (object o, MouseEventArgs mea) =>
             {
+                Debug.WriteLine("MOUSEUP");
                 muisVast = false;
 
                 Point translatedPoint = translateMouseCoordinates(mea.Location);
@@ -168,6 +170,9 @@ namespace SchetsPlus
             {
                 currentAction = new FancyEraserAction();
             }
+
+            currentAction.actionColor = schets.primaryColor;
+            Debug.WriteLine("SET ACTION: " + currentAction);
         }
     }
 }
