@@ -20,8 +20,8 @@
 
     <TabControl >
         <TabItem Header="Colors">
-            <Grid Margin="0,-20,0,20">
-                <Image Width="200" Source="Resources/colorwheel.png" HorizontalAlignment="Left" Margin="15,25,0,0">
+            <Grid Margin="0,-20,0,12">
+                <Image x:Name="imColorPicker" Width="200" Source="Resources/colorwheel.png" HorizontalAlignment="Left" Margin="15,18,0,8" MouseDown="imColorPicker_MouseDown" Height="200">
                 </Image>
                 <Slider x:Name="sliderRed" HorizontalAlignment="Right" Width="76" Height="25" VerticalAlignment="Top" Margin="0,28,55,0" Maximum="255" ValueChanged="sliderRed_ValueChanged" />
                 <Slider x:Name="sliderGreen" HorizontalAlignment="Right" Width="75" Height="25" VerticalAlignment="Top" Margin="0,58,55,0" Maximum="255" ValueChanged="sliderGreen_ValueChanged" />

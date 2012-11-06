@@ -1,28 +1,6 @@
-﻿/*      Mahapps.Metro door MahApps, implementatie door
- * 
- * 
- * 
- * 
- */
-
-
-
-using MahApps.Metro.Controls;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MahApps.Metro.Controls;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace SchetsPlus
 {
@@ -92,18 +70,15 @@ namespace SchetsPlus
             }
             else if (clickedButton.Name == "btText")
             {
-                App.currentSchetsWindow.currentSchetsControl.currentTool = App.availableTools[5];
-                //TODO action
+                App.currentSchetsWindow.currentSchetsControl.currentTool = App.availableTools[6];
             }
             else if (clickedButton.Name == "btEraser")
             {
                 App.currentSchetsWindow.currentSchetsControl.currentTool = App.availableTools[7];
-                //TODO action
             }
             else if (clickedButton.Name == "btFancyEraser")
             {
                 App.currentSchetsWindow.currentSchetsControl.currentTool = App.availableTools[8];
-                //TODO action
             }
         }
     }

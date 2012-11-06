@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Windows.Controls;
 using System.Windows.Forms;
 
 namespace SchetsPlus
@@ -18,19 +16,6 @@ namespace SchetsPlus
         public Schets schets;
         public int lineThickness = 3;
 
-        public Graphics overlayBitmapGraphics
-        {
-            get 
-            {
-                if (overlayBitmap == null)
-                {
-                    overlayBitmap = new Bitmap(schets.imageSize.Width, schets.imageSize.Height);
-                }
-                return Graphics.FromImage(overlayBitmap); 
-            
-            }
-        }
-
         public SchetsControl(string imageName)
         {
             schets = new Schets(imageName, new Size(700, 500));
@@ -40,13 +25,11 @@ namespace SchetsPlus
             
             this.DoubleBuffered = true;
 
-
             this.Paint += this.teken;
             this.Resize += this.veranderAfmeting;
 
             this.MouseDown += (object o, MouseEventArgs mea) =>
             {
-                Debug.WriteLine("MOUSEDOWN");
                 muisVast = true;
 
                 overlayBitmap = new Bitmap(schets.imageSize.Width, schets.imageSize.Height);
@@ -69,7 +52,6 @@ namespace SchetsPlus
             };
             this.MouseUp += (object o, MouseEventArgs mea) =>
             {
-                Debug.WriteLine("MOUSEUP");
                 muisVast = false;
 
                 Point translatedPoint = translateMouseCoordinates(mea.Location);
@@ -78,12 +60,20 @@ namespace SchetsPlus
                 if (currentAction != null)
                 {
                     currentAction.onMouseUp(translatedPoint.X, translatedPoint.Y);
+                    App.currentSchetsWindow.currentSchetsControl.schets.actions.Add(App.currentSchetsWindow.currentSchetsControl.currentAction);
+                    App.historyWindow.updateHistoryList();
                 }
-                App.historyWindow.updateHistoryList();
             };
             this.KeyPress += (object o, KeyPressEventArgs kpea) =>
             {
-                currentTool.Letter(this, kpea.KeyChar);
+                if (kpea.KeyChar > 32)
+                {
+                    currentTool.Letter(this, kpea.KeyChar);
+                    if (currentAction is TextAction)
+                    {
+                        ((TextAction)currentAction).enteredText += kpea.KeyChar;
+                    }
+                }
             };
         }
 
@@ -109,7 +99,11 @@ namespace SchetsPlus
         }
         public Graphics MaakOverlayBitmapGraphics()
         {
-            Graphics g = this.overlayBitmapGraphics;
+            if (overlayBitmap == null)
+            {
+                overlayBitmap = new Bitmap(schets.imageSize.Width, schets.imageSize.Height);
+            }
+            Graphics g = Graphics.FromImage(overlayBitmap); 
             g.SmoothingMode = SmoothingMode.AntiAlias;
             return g;
         }
@@ -138,7 +132,11 @@ namespace SchetsPlus
 
         private void setAction()
         {
-            if (currentTool is GumTool)
+            if (currentTool is TekstTool)
+            {
+                currentAction = new TextAction();
+            }
+            else if (currentTool is GumTool)
             {
                 currentAction = new EraserAction();
             }
@@ -172,7 +170,6 @@ namespace SchetsPlus
             }
 
             currentAction.actionColor = schets.primaryColor;
-            Debug.WriteLine("SET ACTION: " + currentAction);
         }
     }
 }

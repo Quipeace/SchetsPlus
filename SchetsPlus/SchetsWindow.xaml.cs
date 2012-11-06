@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -116,7 +115,7 @@ namespace SchetsPlus
             {
                 App.historyWindow.Show();
                 App.historyWindow.Topmost = true;
-                App.historyWindow.updateHistoryList();
+                App.historyWindow.updateHistoryListSource();
             }
             catch (Exception)
             {
@@ -206,7 +205,7 @@ namespace SchetsPlus
                 currentSchetsControl = schetsControls[tabControl.SelectedIndex];
                 MetroWindow_SizeChanged_1(null, null);
                 App.colorPickerWindow.refreshColors();
-                App.historyWindow.updateHistoryList();
+                App.historyWindow.updateHistoryListSource();
             }
         }
 

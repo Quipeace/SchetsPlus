@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing;
-using System.Windows.Forms;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace SchetsPlus
 {
     [Serializable]
     public abstract class Action
     {
-        public bool drawAction = true;
+        public bool drawAction;
         public int lineThickness = 3;
         public Color actionColor;
 
@@ -33,7 +30,6 @@ namespace SchetsPlus
         {
             App.currentSchetsWindow.currentSchetsControl.currentAction.endPoint[0] = x;
             App.currentSchetsWindow.currentSchetsControl.currentAction.endPoint[1] = y;
-            App.currentSchetsWindow.currentSchetsControl.schets.actions.Add(App.currentSchetsWindow.currentSchetsControl.currentAction);
         }
 
         public abstract bool isInClick(int x, int y);
@@ -124,6 +120,62 @@ namespace SchetsPlus
 
         public override bool isInClick(int x, int y)
         {
+            return false;
+        }
+    }
+
+    [Serializable]
+    public class TextAction : Action
+    {
+        public string enteredText = "";
+        public override string ToString()
+        {
+            return "Text";
+        }
+        public override void onMouseMove(int x, int y)
+        {
+        }
+
+        public override void draw(SchetsControl s)
+        {
+            App.availableTools[6].MuisVast(s, new Point(startPoint[0], startPoint[1]));
+            App.availableTools[6].MuisVast(s, new Point(startPoint[0], startPoint[1]));
+            for (int i = 0; i < enteredText.Length; i++ )
+            {
+                App.availableTools[6].Letter(s, enteredText[i]);
+            }
+        }
+
+         public override bool isInClick(int x, int y)
+        {
+            if (startPoint[0] < endPoint[0] && startPoint[1] > endPoint[1])
+            {
+                if (x <= endPoint[0] && x >= startPoint[0] && y <= startPoint[1] && y >= endPoint[1])
+                {
+                    return true;
+                }
+            }
+            if (startPoint[0] < endPoint[0] && startPoint[1] < endPoint[1])
+            { 
+                if (x <= endPoint[0] && x >= startPoint[0] && y <= endPoint[1] && y >= startPoint[1])
+                {
+                    return true;
+                }
+            }
+            if (startPoint[0] > endPoint[0] && startPoint[1] > endPoint[1])
+            {
+                if (x <= startPoint[0] && x >= endPoint[0] && y <= startPoint[1] && y >= endPoint[1])
+                {
+                    return true;
+                }
+            }
+            if (startPoint[0] > endPoint[0] && startPoint[1] < endPoint[1])
+            {
+                if (x <= startPoint[0] && x >= endPoint[0] && y <= endPoint[1] && y >= startPoint[1])
+                {
+                    return true;
+                }
+            }
             return false;
         }
     }

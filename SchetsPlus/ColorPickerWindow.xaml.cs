@@ -1,19 +1,12 @@
 ﻿using MahApps.Metro.Controls;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace SchetsPlus
 {
@@ -117,5 +110,35 @@ namespace SchetsPlus
             {
             }
         }
+
+        private void GetPixelColor(Point point) //TODO fix
+        {
+            try
+            {
+                CroppedBitmap cb = new CroppedBitmap(imColorPicker.Source as BitmapSource,
+                    new Int32Rect((int)Mouse.GetPosition(imColorPicker).X,
+                                  (int)Mouse.GetPosition(this).Y, 1, 1));
+                byte[] pixels = new byte[4];
+                try
+                {
+                    cb.CopyPixels(pixels, 4, 0);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                Console.WriteLine(pixels[0] + ":" + pixels[1] +
+                                  ":" + pixels[2] + ":" + pixels[3]);
+                cvPrimaryColor.Background = new SolidColorBrush(Color.FromRgb(pixels[2], pixels[1], pixels[0]));
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private void imColorPicker_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            GetPixelColor(e.GetPosition(imColorPicker));
+        }     
     }
 }

@@ -31,24 +31,31 @@ namespace SchetsPlus
 
     public class TekstTool : StartpuntTool
     {
+        string enteredText;
+
+        public override void MuisVast(SchetsControl s, Point p)
+        {
+            base.MuisVast(s, p);
+            enteredText = "";
+        }
         public override void MuisDrag(SchetsControl s, Point p)
         {
         }
+
         public override void Letter(SchetsControl s, char c)
         {
-            if (c >= 32)
-            {
-                Graphics gr = s.MaakBitmapGraphics();
-                Font font = new Font("Tahoma", 40);
-                string tekst = c.ToString();
-                SizeF sz = 
-                gr.MeasureString(tekst, font, this.startpunt, StringFormat.GenericTypographic);
-                gr.DrawString   (tekst, font, kwast, 
-                                              this.startpunt, StringFormat.GenericTypographic);
-                // gr.DrawRectangle(Pens.Black, startpunt.X, startpunt.Y, sz.Width, sz.Height);
-                startpunt.X += (int)sz.Width;
-                s.Invalidate();
-            }
+            enteredText += c;
+
+            Graphics g = s.MaakBitmapGraphics();
+
+            Font font = new Font("Tahoma", 40);
+            string tekst = c.ToString();
+            SizeF sz = g.MeasureString(enteredText, font, this.startpunt, StringFormat.GenericTypographic);
+            g.DrawString(enteredText, font, kwast, this.startpunt, StringFormat.GenericTypographic);
+
+            s.currentAction.endPoint[0] = (int) (s.currentAction.startPoint[0] + sz.Width);
+            s.currentAction.endPoint[1] = (int) (s.currentAction.startPoint[1] + sz.Height);
+            s.Invalidate();
         }
     }
 
@@ -132,14 +139,16 @@ namespace SchetsPlus
     public class LijnTool : TweepuntTool
     {
         public override void Bezig(Graphics g, Point p1, Point p2)
-        {   g.DrawLine(MaakPen( kwast,3), p1.X, p1.Y, p2.X, p2.Y);
+        {
+            g.DrawLine(MaakPen( kwast,3), p1.X, p1.Y, p2.X, p2.Y);
         }
     }
 
     public class PenTool : LijnTool
     {
         public override void MuisDrag(SchetsControl s, Point p)
-        {   this.MuisLos(s, p);
+        {
+            this.MuisLos(s, p);
             this.MuisVast(s, p);
         }
     }
@@ -169,18 +178,17 @@ namespace SchetsPlus
             }
             for (; i >= 0; i--)
             {
-                if (s.schets.actions[i].isInClick(p.X, p.Y))
+                if (!(s.schets.actions[i] is FancyEraserAction) && s.schets.actions[i].isInClick(p.X, p.Y))
                 {
                     if (!s.schets.actions[i].drawAction)
                     {
-                        break;
+                        continue;
                     }
                     s.schets.actions[i].drawAction = false;
                     ((FancyEraserAction)s.currentAction).erasedAction = s.schets.actions[i];
                     hasErased = true;
                     break;
                 }
-
             }
             if (!hasErased)
             {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -23,7 +22,19 @@ namespace SchetsPlus
         public Color primaryColor;
         public Color secondaryColor;
 
-        public ObservableCollection<Action> actions = new ObservableCollection<Action>();
+        public ObservableCollection<Action> actions = new ObservableCollection<Action>();   // ObservableCollection to automatically update historyWindow
+
+        public Graphics BitmapGraphics
+        {
+            get
+            {
+                if (bitmap == null)
+                {
+                    this.bitmap = new Bitmap(imageSize.Width, imageSize.Height);
+                }
+                return Graphics.FromImage(bitmap);
+            }
+        }
 
         public Schets(string name, Size imageSize)
         {
@@ -35,17 +46,6 @@ namespace SchetsPlus
             primaryColor = Color.Black;
             secondaryColor = Color.White;
         }
-        public Graphics BitmapGraphics
-        {
-            get 
-            {
-                if (bitmap == null)
-                {
-                    this.bitmap = new Bitmap(imageSize.Width, imageSize.Height);
-                }
-                return Graphics.FromImage(bitmap); 
-            }
-        }
 
         public void VeranderAfmeting(Size sz)
         {
@@ -53,7 +53,6 @@ namespace SchetsPlus
             {
 
             }
-            //TODO canvas resize
         }
         public void Teken(Graphics gr, int width, int height)
         {
@@ -65,6 +64,11 @@ namespace SchetsPlus
         {
             Color tempPrimary = primaryColor;
             App.currentSchetsWindow.currentSchetsControl.Schoon();
+
+            for (int i = 0; i < actions.Count; i++)
+            {
+                actions[i].drawAction = true;
+            }
 
             for (int i = 0; i <= actionDrawLimit && i < actions.Count; i++)
             {
@@ -96,8 +100,7 @@ namespace SchetsPlus
 
         public void Schoon()
         {
-            Graphics gr = Graphics.FromImage(bitmap);
-            gr.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height);
+            BitmapGraphics.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height);
         }
         public void Roteer()
         {
