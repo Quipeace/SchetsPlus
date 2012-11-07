@@ -15,6 +15,8 @@ namespace SchetsPlus
         public string imageName;
         public string imagePath;
 
+        public int rotation;
+
         public int actionDrawLimit;
         public int actionEraseLimit = -1;
 
@@ -37,6 +39,7 @@ namespace SchetsPlus
 
         public Schets(string name, Size imageSize)
         {
+            this.rotation = 0;
             this.imageName = name;
             this.imageSize = imageSize;
             this.imageRatio = (double) imageSize.Width / (double) imageSize.Height;
@@ -55,8 +58,6 @@ namespace SchetsPlus
         }
         public void Teken(Graphics gr, int width, int height)
         {
-            Debug.WriteLine("CONTROL: " + width + "::" + height);
-            Debug.WriteLine("BMP    : " + bitmap.Width + "::" + bitmap.Height);
             gr.Clear(Color.White);
             gr.DrawImage(bitmap, 0, 0, width, height);
         }

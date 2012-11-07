@@ -15,8 +15,10 @@ namespace SchetsPlus
     public partial class SchetsWindow : MetroWindow
     {
         public List<SchetsControl> schetsControls = new List<SchetsControl>();
+        public List<WindowsFormsHost> hosts = new List<WindowsFormsHost>();
         public ObservableCollection<TabItem> tabItems = new ObservableCollection<TabItem>();    // ObservableCollection to automatically update tabControl
         public SchetsControl currentSchetsControl;
+        public WindowsFormsHost currentHost;
 
         public TabItem item;
 
@@ -42,7 +44,7 @@ namespace SchetsPlus
 
         private void addNewSchets()
         {
-            currentSchetsControl = new SchetsControl("Untitled(" + schetsControls.Count + ").schep");
+            currentSchetsControl = new SchetsControl("new(" + schetsControls.Count + ").schep");
             addCurrentSchetsControl();
         }
 
@@ -56,11 +58,12 @@ namespace SchetsPlus
         {
             schetsControls.Add(currentSchetsControl);
             MetroWindow_SizeChanged_1(null, null);
-
+            
             WindowsFormsHost newHost = new WindowsFormsHost();
-            newHost.Width = 4000;
-            newHost.Height = 4000;
+            newHost.Width = currentSchetsControl.Width;
+            newHost.Height = currentSchetsControl.Height;
             newHost.Child = currentSchetsControl;
+            hosts.Add(newHost);
 
             TabItem newItem = new TabItem();
             newItem.Header = currentSchetsControl.schets.imageName;
@@ -82,7 +85,6 @@ namespace SchetsPlus
             newItem.ContextMenu = ctxMenu;
 
             tabItems.Add(newItem);
-            tabControl.SelectedIndex = tabItems.Count - 1;
         }
 
         private void MetroWindow_LocationChanged_1(object sender, EventArgs e)
@@ -145,17 +147,15 @@ namespace SchetsPlus
         {
             pinWindows();       // Size changed, move helper windows accordingly
 
-            Debug.WriteLine("THIS: " + this.Width + ":: " + this.Height);
             if (this.Width < currentSchetsControl.schets.imageSize.Width || (this.Height - 80) < currentSchetsControl.schets.imageSize.Height)
             {
-                Debug.WriteLine("RESIZE");
                 double widthDiff = this.Width / currentSchetsControl.schets.imageSize.Width;
                 double heightDiff = (this.Height - 80) / currentSchetsControl.schets.imageSize.Height;
 
                 if (heightDiff < widthDiff)
                 {
-                    currentSchetsControl.Height = (int) this.Height - 80;
-                    currentSchetsControl.Width = (int) (currentSchetsControl.Height * currentSchetsControl.schets.imageRatio);
+                    currentSchetsControl.Height = (int)this.Height - 80;
+                    currentSchetsControl.Width = (int)(currentSchetsControl.Height * currentSchetsControl.schets.imageRatio);
                 }
                 else
                 {
@@ -165,12 +165,9 @@ namespace SchetsPlus
             }
             else
             {
-                Debug.WriteLine("NO RESIZE");
                 currentSchetsControl.Width = currentSchetsControl.schets.imageSize.Width;
                 currentSchetsControl.Height = currentSchetsControl.schets.imageSize.Height;
             }
-
-            Debug.WriteLine("BMP : " + currentSchetsControl.Width + ":: " + currentSchetsControl.Height);
         }
 
         public void pinWindows()        // Pin all possible helper windows
@@ -209,6 +206,7 @@ namespace SchetsPlus
             if(tabControl.SelectedIndex != -1)                                                  // -1 == no tabs
             {
                 currentSchetsControl = schetsControls[tabControl.SelectedIndex];
+                currentHost = hosts[tabControl.SelectedIndex];
                 MetroWindow_SizeChanged_1(null, null);
                 App.colorPickerWindow.refreshColors();
                 App.historyWindow.updateHistoryListSource();
@@ -281,8 +279,7 @@ namespace SchetsPlus
 
             SchetsWindow newWindow = new SchetsWindow((SchetsControl) controlHost.Child);
             newWindow.Show();
-
-
+            
             mnCloseTab_Click(sender, null);
         }
 
@@ -429,17 +426,22 @@ namespace SchetsPlus
             }
         }
 
-        private void mnResizeImage_Click(object sender, RoutedEventArgs e)
-        {
-            new ResizeDialog().ShowDialog();
-        }
-
         private void mnModifyCanvas_Click(object sender, RoutedEventArgs e)
         {
             CanvasSizeDialog dialog = new CanvasSizeDialog();
             dialog.Left = this.Left + this.Width - dialog.Width;
             dialog.Top = this.Top + 30;
             dialog.ShowDialog();
+        }
+
+        private void mnRotateCCW_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void mnRotateCw_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

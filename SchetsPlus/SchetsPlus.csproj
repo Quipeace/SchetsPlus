@@ -70,9 +70,6 @@
     <Compile Include="CanvasSizeDialog.xaml.cs">
       <DependentUpon>CanvasSizeDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ResizeDialog.xaml.cs">
-      <DependentUpon>ResizeDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="HistoryWindow.xaml.cs">
       <DependentUpon>HistoryWindow.xaml</DependentUpon>
     </Compile>
@@ -89,10 +86,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CanvasSizeDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ResizeDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -174,6 +167,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\imSubmit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\imEraser.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\imFancyEraser.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

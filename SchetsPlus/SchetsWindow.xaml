@@ -4,7 +4,7 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
-        Title="Schets+" Height="700" Width="750" LocationChanged="MetroWindow_LocationChanged_1" Activated="MetroWindow_Activated_1" WindowStartupLocation="CenterScreen" HorizontalAlignment="Center" VerticalAlignment="Center" Deactivated="MetroWindow_Deactivated_1" Closing="MetroWindow_Closing_1" SizeChanged="MetroWindow_SizeChanged_1">
+        Title="Schets+" Height="700" Width="900" LocationChanged="MetroWindow_LocationChanged_1" Activated="MetroWindow_Activated_1" WindowStartupLocation="CenterScreen" HorizontalAlignment="Center" VerticalAlignment="Center" Deactivated="MetroWindow_Deactivated_1" Closing="MetroWindow_Closing_1" SizeChanged="MetroWindow_SizeChanged_1">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -32,8 +32,9 @@
                     <MenuItem x:Name="mnSaveAs" Header="Save As..." Click="mnSaveAs_Click" />
                 </MenuItem>
                 <MenuItem Header="Image" FontSize="12" Height="32" Background="#FF3EAEDE" Foreground="#FFF7F7F7">
-                    <MenuItem x:Name="mnResizeImage" Header="Resize Image" Click="mnResizeImage_Click" />
                     <MenuItem x:Name="mnModifyCanvas" Header="Modify Canvas" Click="mnModifyCanvas_Click" />
+                    <MenuItem x:Name="mnRotateCw" Header="Rotate Left" Click="mnRotateCw_Click" />
+                    <MenuItem x:Name="mnRotateCCW" Header="Rotate Right" Click="mnRotateCCW_Click"/>
                 </MenuItem>
                 <MenuItem Header="View" FontSize="12" Height="30" Background="#FF3EAEDE" Foreground="#FFF7F7F7">
                     <MenuItem x:Name="mnTools" Header="Tools" Click="mnTools_Click" />
