@@ -32,8 +32,8 @@
                     <MenuItem x:Name="mnSaveAs" Header="Save As..." Click="mnSaveAs_Click" />
                 </MenuItem>
                 <MenuItem Header="Image" FontSize="12" Height="32" Background="#FF3EAEDE" Foreground="#FFF7F7F7">
-                    <MenuItem Header="Resize Image" />
-                    <MenuItem Header="Modify Canvas" />
+                    <MenuItem x:Name="mnResizeImage" Header="Resize Image" Click="mnResizeImage_Click" />
+                    <MenuItem x:Name="mnModifyCanvas" Header="Modify Canvas" Click="mnModifyCanvas_Click" />
                 </MenuItem>
                 <MenuItem Header="View" FontSize="12" Height="30" Background="#FF3EAEDE" Foreground="#FFF7F7F7">
                     <MenuItem x:Name="mnTools" Header="Tools" Click="mnTools_Click" />

@@ -140,7 +140,7 @@ namespace SchetsPlus
             }
         }
 
-        private void MetroWindow_SizeChanged_1(object sender, SizeChangedEventArgs e)
+        public void MetroWindow_SizeChanged_1(object sender, SizeChangedEventArgs e)
         {
             pinWindows();       // Size changed, move helper windows accordingly
 
@@ -421,6 +421,19 @@ namespace SchetsPlus
 
                 currentSchetsControl.schets.imagePath = newImagePath;
             }
+        }
+
+        private void mnResizeImage_Click(object sender, RoutedEventArgs e)
+        {
+            new ResizeDialog().ShowDialog();
+        }
+
+        private void mnModifyCanvas_Click(object sender, RoutedEventArgs e)
+        {
+            CanvasSizeDialog dialog = new CanvasSizeDialog();
+            dialog.Left = this.Left + this.Width - dialog.Width;
+            dialog.Top = this.Top + 30;
+            dialog.ShowDialog();
         }
     }
 }

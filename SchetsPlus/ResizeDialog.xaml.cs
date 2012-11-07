@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace SchetsPlus.Dialogs
+namespace SchetsPlus
 {
     /// <summary>
     /// Interaction logic for ResizeDialog.xaml
