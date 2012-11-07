@@ -8,7 +8,6 @@ namespace SchetsPlus
     [Serializable]
     public class Schets
     {
-        [NonSerialized]
         public Bitmap bitmap;
 
         public Size imageSize;
@@ -56,6 +55,8 @@ namespace SchetsPlus
         }
         public void Teken(Graphics gr, int width, int height)
         {
+            Debug.WriteLine("CONTROL: " + width + "::" + height);
+            Debug.WriteLine("BMP    : " + bitmap.Width + "::" + bitmap.Height);
             gr.Clear(Color.White);
             gr.DrawImage(bitmap, 0, 0, width, height);
         }

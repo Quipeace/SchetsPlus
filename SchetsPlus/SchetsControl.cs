@@ -18,7 +18,7 @@ namespace SchetsPlus
 
         public SchetsControl(string imageName)
         {
-            schets = new Schets(imageName, new Size(700, 500)); //Aanmaken van nieuw schetsobject
+            schets = new Schets(imageName, new Size(600, 500)); //Aanmaken van nieuw schetsobject
 
             currentTool = App.availableTools[0];    //Zeggen dat currentTool een pen is (standaard bij openen)
             currentAction = new PenAction();    //Ook gelijk de penAction hierbij aanroepen

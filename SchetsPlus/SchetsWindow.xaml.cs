@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -57,8 +58,8 @@ namespace SchetsPlus
             MetroWindow_SizeChanged_1(null, null);
 
             WindowsFormsHost newHost = new WindowsFormsHost();
-            newHost.Height = currentSchetsControl.Height;
-            newHost.Width = currentSchetsControl.Width;
+            newHost.Width = 4000;
+            newHost.Height = 4000;
             newHost.Child = currentSchetsControl;
 
             TabItem newItem = new TabItem();
@@ -144,8 +145,10 @@ namespace SchetsPlus
         {
             pinWindows();       // Size changed, move helper windows accordingly
 
+            Debug.WriteLine("THIS: " + this.Width + ":: " + this.Height);
             if (this.Width < currentSchetsControl.schets.imageSize.Width || (this.Height - 80) < currentSchetsControl.schets.imageSize.Height)
             {
+                Debug.WriteLine("RESIZE");
                 double widthDiff = this.Width / currentSchetsControl.schets.imageSize.Width;
                 double heightDiff = (this.Height - 80) / currentSchetsControl.schets.imageSize.Height;
 
@@ -162,9 +165,12 @@ namespace SchetsPlus
             }
             else
             {
+                Debug.WriteLine("NO RESIZE");
                 currentSchetsControl.Width = currentSchetsControl.schets.imageSize.Width;
                 currentSchetsControl.Height = currentSchetsControl.schets.imageSize.Height;
             }
+
+            Debug.WriteLine("BMP : " + currentSchetsControl.Width + ":: " + currentSchetsControl.Height);
         }
 
         public void pinWindows()        // Pin all possible helper windows

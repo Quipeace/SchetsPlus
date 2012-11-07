@@ -17,8 +17,8 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <TabControl>
-        <TabItem Header="Pixels">
+    <TabControl x:Name="tabControl">
+        <TabItem  Header="Pixels">
             <Canvas Margin="8,0,2,0">
                 <TextBox x:Name="tbWidthPx" Height="23" TextWrapping="Wrap" Width="50" Canvas.Left="52" Canvas.Top="10"/>
                 <TextBox x:Name="tbHeightPx" Height="23" TextWrapping="Wrap"  Width="50" Canvas.Left="176" Canvas.Top="10"/>
