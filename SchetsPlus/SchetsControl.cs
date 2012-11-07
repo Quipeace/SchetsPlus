@@ -7,57 +7,57 @@ namespace SchetsPlus
 {
     public class SchetsControl : System.Windows.Forms.UserControl
     {
-        private Bitmap overlayBitmap;
+        private Bitmap overlayBitmap;   //Declareren overlayBitmap die later gebruikt wordt
 
-        public ISchetsTool currentTool;
-        public Action currentAction;
+        public ISchetsTool currentTool; //Declareren van de currenttool die gebruikt wordt
+        public Action currentAction;    //Declareren van de currentAction die gebruikt wordt
 
-        private Boolean muisVast;
-        public Schets schets;
-        public int lineThickness = 3;
+        private Boolean muisVast;   //Declareren boolean muisVast die checkt of muis ingedrukt is
+        public Schets schets;       //Declareren van schets
+        public int lineThickness = 3;   //Declareren en zetten van de lijndikte op 3
 
         public SchetsControl(string imageName)
         {
-            schets = new Schets(imageName, new Size(700, 500));
+            schets = new Schets(imageName, new Size(700, 500)); //Aanmaken van nieuw schetsobject
 
-            currentTool = App.availableTools[0];
-            currentAction = new PenAction();
+            currentTool = App.availableTools[0];    //Zeggen dat currentTool een pen is (standaard bij openen)
+            currentAction = new PenAction();    //Ook gelijk de penAction hierbij aanroepen
             
-            this.DoubleBuffered = true;
+            this.DoubleBuffered = true; //Voorkomen van flikkeren van scherm tijdens tekenen
 
             this.Paint += this.teken;
             this.Resize += this.veranderAfmeting;
 
             this.MouseDown += (object o, MouseEventArgs mea) =>
             {
-                muisVast = true;
+                muisVast = true;    //Zeggen dat muisVast true is, zodra je muis indrukt
 
-                overlayBitmap = new Bitmap(schets.imageSize.Width, schets.imageSize.Height);
-                setAction();
+                overlayBitmap = new Bitmap(schets.imageSize.Width, schets.imageSize.Height);    //Zetten van overlayBitmap met de width en height
+                setAction();    
 
-                Point translatedPoint = translateMouseCoordinates(mea.Location);
+                Point translatedPoint = translateMouseCoordinates(mea.Location);    //Pak de muis-coördinaten
 
-                currentTool.MuisVast(this, translatedPoint);
+                currentTool.MuisVast(this, translatedPoint);    //Gebruiken muiscoördinaten bij aanroepen methode muisVast
                 currentAction.onMouseDown(this, translatedPoint.X, translatedPoint.Y, 3, schets.primaryColor);
             };
             this.MouseMove += (object o, MouseEventArgs mea) =>
             {
-                if (muisVast)
+                if (muisVast)   //Doe dit alleen indien muis is ingedrukt
                 {
-                    Point translatedPoint = translateMouseCoordinates(mea.Location);
+                    Point translatedPoint = translateMouseCoordinates(mea.Location);    //Houdt telkens bij welke punten je over gaat
 
-                    currentTool.MuisDrag(this, translatedPoint);
+                    currentTool.MuisDrag(this, translatedPoint);    //Aanroepen methode muisdrag met deze muiscoördinaten
                     currentAction.onMouseMove(translatedPoint.X, translatedPoint.Y);
                 }
             };
             this.MouseUp += (object o, MouseEventArgs mea) =>
             {
-                muisVast = false;
+                muisVast = false;   //Boolean muisVast op false zetten aangezien muis nu los is
 
-                Point translatedPoint = translateMouseCoordinates(mea.Location);
+                Point translatedPoint = translateMouseCoordinates(mea.Location);    //Bekijken op welke coördinaten dit gebeurde
 
-                currentTool.MuisLos(this, translatedPoint);
-                if (currentAction != null)
+                currentTool.MuisLos(this, translatedPoint);     //Aanroepen methode muislos met deze coördinaten
+                if (currentAction != null)  //Indien er een action was gebruikt voeg dit dan toe aan de action list en update de historyBox
                 {
                     currentAction.onMouseUp(translatedPoint.X, translatedPoint.Y);
                     App.currentSchetsWindow.currentSchetsControl.schets.actions.Add(App.currentSchetsWindow.currentSchetsControl.currentAction);
@@ -71,7 +71,7 @@ namespace SchetsPlus
                     currentTool.Letter(this, kpea.KeyChar);
                     if (currentAction is TextAction)
                     {
-                        ((TextAction)currentAction).enteredText += kpea.KeyChar;
+                        ((TextAction)currentAction).enteredText += kpea.KeyChar;    //Voeg de letter toe aan de enteredTExt indien het textAction was
                     }
                 }
             };
@@ -91,13 +91,13 @@ namespace SchetsPlus
             this.Invalidate();
         }
 
-        public Graphics MaakBitmapGraphics()
+        public Graphics MaakBitmapGraphics()    //Maak nieuwe bitmapgraphics aan
         {   
-            Graphics g = schets.BitmapGraphics;
+            Graphics g = schets.BitmapGraphics;     
             g.SmoothingMode = SmoothingMode.AntiAlias;
             return g;
         }
-        public Graphics MaakOverlayBitmapGraphics()
+        public Graphics MaakOverlayBitmapGraphics() //Maak nieuwe overlaybitmap graphics aan
         {
             if (overlayBitmap == null)
             {
@@ -119,7 +119,7 @@ namespace SchetsPlus
             this.veranderAfmeting(o, ea);
         }
         
-        public Point translateMouseCoordinates(Point mouseLocation)
+        public Point translateMouseCoordinates(Point mouseLocation) //Indien het scherm verkleind is, verander dan de muiscoördinaten
         {
             double widthRatio = (double) schets.imageSize.Width / this.Width;
             double heightRatio = (double)schets.imageSize.Height / this.Height;
@@ -130,7 +130,7 @@ namespace SchetsPlus
             return new Point(newMouseX, newMouseY);
         }
 
-        private void setAction()
+        private void setAction()        //Het zetten van de acties bij de verschillende tools
         {
             if (currentTool is TekstTool)
             {
@@ -169,7 +169,7 @@ namespace SchetsPlus
                 currentAction = new FancyEraserAction();
             }
 
-            currentAction.actionColor = schets.primaryColor;
+            currentAction.actionColor = schets.primaryColor;        //Zeggen welke kleur er gebruikt moet worden
         }
     }
 }
