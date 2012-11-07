@@ -85,13 +85,12 @@ namespace SchetsPlus
         }
         public override void draw(SchetsControl s)  //Functie waarmee wordt bepaald waar er getekend moet worden
         {
-            s.schets.primaryColor = Color.White;
-            App.availableTools[0].MuisVast(s, new Point(startPoint[0], startPoint[1]));
+            App.availableTools[7].MuisVast(s, new Point(startPoint[0], startPoint[1]));
             for (int i = 1; i < points.Count; i++)
             {
-                App.availableTools[0].MuisDrag(s, new Point(points[i][0], points[i][1]));
+                App.availableTools[7].MuisDrag(s, new Point(points[i][0], points[i][1]));
             }
-            App.availableTools[0].MuisLos(s, new Point(endPoint[0], endPoint[1]));
+            App.availableTools[7].MuisLos(s, new Point(endPoint[0], endPoint[1]));
         }
         public override bool isInClick(int x, int y)
         {

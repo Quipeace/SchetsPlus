@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace SchetsPlus
 {
@@ -104,9 +105,18 @@ namespace SchetsPlus
         {
             BitmapGraphics.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height);
         }
-        public void Roteer()
+        public void Roteer(bool cw)
         {
-            bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            if (cw)
+            {
+                bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            }
+            else
+            {
+                bitmap.RotateFlip(RotateFlipType.Rotate270FlipNone);
+            }
+
+            imageSize = bitmap.Size;
         }
     }
 }

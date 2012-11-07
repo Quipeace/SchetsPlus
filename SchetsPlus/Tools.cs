@@ -157,7 +157,7 @@ namespace SchetsPlus
     {
         public override void Bezig(Graphics g, Point p1, Point p2)
         {   
-            g.DrawLine(MaakPen(Brushes.White, 3), p1.X, p1.Y, p2.X, p2.Y); //Overriden methode bezig en teken een witte lijn tussen de begin- en eindpunten van de lijn
+            g.DrawLine(MaakPen(Brushes.White, 7), p1.X, p1.Y, p2.X, p2.Y); //Overriden methode bezig en teken een witte lijn tussen de begin- en eindpunten van de lijn
         }
     }
 

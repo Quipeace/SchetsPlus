@@ -113,11 +113,6 @@ namespace SchetsPlus
             schets.Schoon();
             this.Invalidate();
         }
-        public void Roteer(object o, EventArgs ea)
-        {   
-            schets.Roteer();
-            this.veranderAfmeting(o, ea);
-        }
         
         public Point translateMouseCoordinates(Point mouseLocation) //Indien het scherm verkleind is, verander dan de muiscoördinaten
         {

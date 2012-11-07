@@ -9,6 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms.Integration;
+using System.Windows.Media;
 
 namespace SchetsPlus
 {
@@ -436,12 +437,14 @@ namespace SchetsPlus
 
         private void mnRotateCCW_Click(object sender, RoutedEventArgs e)
         {
-
+            currentSchetsControl.schets.Roteer(false);
+            MetroWindow_SizeChanged_1(null, null);
         }
 
         private void mnRotateCw_Click(object sender, RoutedEventArgs e)
         {
-
+            currentSchetsControl.schets.Roteer(true);
+            MetroWindow_SizeChanged_1(null, null);
         }
     }
 }
