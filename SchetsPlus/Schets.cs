@@ -10,6 +10,7 @@ namespace SchetsPlus
     public class Schets
     {
         public Bitmap bitmap;
+        public Bitmap loadedBitmap;
 
         public Size imageSize;
         public double imageRatio;
@@ -68,6 +69,19 @@ namespace SchetsPlus
             Color tempPrimary = primaryColor;
             App.currentSchetsWindow.currentSchetsControl.Schoon();
 
+            switch (rotation)
+            {
+                case 90:
+                    Roteer(false);
+                    break;
+                case 180:
+                    Roteer(false); Roteer(false);
+                    break;
+                case 270:
+                    Roteer(true);
+                    break;
+            }
+
             for (int i = 0; i < actions.Count; i++)
             {
                 actions[i].drawAction = true;
@@ -99,15 +113,29 @@ namespace SchetsPlus
                     actions[i].draw(s);
                 }
             }
+
+            switch (rotation)
+            {
+                case 90:
+                    Roteer(true);
+                    break;
+                case 180:
+                    Roteer(false); Roteer(false);
+                    break;
+                case 270:
+                    Roteer(true);
+                    break;
+            }
         }
 
         public void Schoon()
         {
-            BitmapGraphics.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height);
+            Debug.WriteLine("SCHOON");
+            bitmap = loadedBitmap;
         }
         public void Roteer(bool cw)
         {
-            if (cw)
+            /*if (cw)
             {
                 bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
                 rotation += 90;
@@ -122,7 +150,7 @@ namespace SchetsPlus
                     rotation = 270;
             }
 
-            imageSize = bitmap.Size;
+            imageSize = bitmap.Size;*/
         }
     }
 }

@@ -66,8 +66,9 @@ namespace SchetsPlus
             return new Rectangle( new Point(Math.Min(p1.X,p2.X), Math.Min(p1.Y,p2.Y)), new Size (Math.Abs(p1.X-p2.X), Math.Abs(p1.Y-p2.Y)));
         }
         public static Pen MaakPen(Brush b, int dikte)
-        {   
+        {
             Pen pen = new Pen(b, dikte);    //Aanmaken van de pen
+
             pen.StartCap = LineCap.Round;
             pen.EndCap = LineCap.Round;
             return pen;

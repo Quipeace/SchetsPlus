@@ -122,24 +122,33 @@ namespace SchetsPlus
             int newTestX = schets.imageSize.Width;
             int newMouseX;
             int newMouseY;
-            switch (schets.rotation)
+            if (currentTool is FancyEraser)
             {
-                case 90:
-                    newMouseX = (int)(mouseLocation.Y);
-                    newMouseY = (int)(schets.imageSize.Width - mouseLocation.X);
-                    return new Point(newMouseX, newMouseY);
-                case 180:
-                    newMouseX = (int)(schets.imageSize.Width - mouseLocation.X);
-                    newMouseY = (int)(schets.imageSize.Height - mouseLocation.Y);
-                    return new Point(newMouseX, newMouseY);
-                case 270:
-                    newMouseX = (int)(schets.imageSize.Height - mouseLocation.Y);
-                    newMouseY = (int)(mouseLocation.X);
-                    return new Point(newMouseX, newMouseY);
-                default:
-                    newMouseX = (int)(mouseLocation.X * widthRatio);
-                    newMouseY = (int)(mouseLocation.Y * heightRatio);
-                    return new Point(newMouseX, newMouseY);
+                switch (schets.rotation)
+                {
+                    case 90:
+                        newMouseX = (int)(mouseLocation.Y);
+                        newMouseY = (int)(schets.imageSize.Width - mouseLocation.X);
+                        return new Point(newMouseX, newMouseY);
+                    case 180:
+                        newMouseX = (int)(schets.imageSize.Width - mouseLocation.X);
+                        newMouseY = (int)(schets.imageSize.Height - mouseLocation.Y);
+                        return new Point(newMouseX, newMouseY);
+                    case 270:
+                        newMouseX = (int)(schets.imageSize.Height - mouseLocation.Y);
+                        newMouseY = (int)(mouseLocation.X);
+                        return new Point(newMouseX, newMouseY);
+                    default:
+                        newMouseX = (int)(mouseLocation.X * widthRatio);
+                        newMouseY = (int)(mouseLocation.Y * heightRatio);
+                        return new Point(newMouseX, newMouseY);
+                }
+            }
+            else
+            {
+                newMouseX = (int)(mouseLocation.X * widthRatio);
+                newMouseY = (int)(mouseLocation.Y * heightRatio);
+                return new Point(newMouseX, newMouseY);
             }
         }
 

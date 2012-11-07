@@ -47,9 +47,6 @@ namespace SchetsPlus
             newSchets.actionDrawLimit = existingSchets.actionDrawLimit;
             App.currentSchetsWindow.currentSchetsControl.schets = newSchets;
 
-            App.currentSchetsWindow.currentHost.Width = newWidth;
-            App.currentSchetsWindow.currentHost.Height = newHeight;
-
             App.currentSchetsWindow.currentSchetsControl.schets.TekenFromActions(App.currentSchetsWindow.currentSchetsControl);
 
             App.currentSchetsWindow.MetroWindow_SizeChanged_1(null, null);

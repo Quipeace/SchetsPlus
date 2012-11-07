@@ -86,6 +86,7 @@ namespace SchetsPlus
             newItem.ContextMenu = ctxMenu;
 
             tabItems.Add(newItem);
+            tabControl.SelectedIndex = tabItems.Count - 1;
         }
 
         private void MetroWindow_LocationChanged_1(object sender, EventArgs e)
@@ -169,6 +170,12 @@ namespace SchetsPlus
                 currentSchetsControl.Width = currentSchetsControl.schets.imageSize.Width;
                 currentSchetsControl.Height = currentSchetsControl.schets.imageSize.Height;
             }
+            try
+            {
+                App.currentSchetsWindow.currentHost.Width = currentSchetsControl.Width;
+                App.currentSchetsWindow.currentHost.Height = currentSchetsControl.Height;
+            }
+            catch (NullReferenceException) { }
         }
 
         public void pinWindows()        // Pin all possible helper windows
@@ -420,10 +427,17 @@ namespace SchetsPlus
                 }
                 else
                 {
-                    currentSchetsControl.schets.bitmap = new Bitmap(newImagePath);
+                    Bitmap bmp = new Bitmap(newImagePath);
+                    currentSchetsControl.schets.loadedBitmap = bmp;
+                    currentSchetsControl.schets.imageSize = currentSchetsControl.schets.bitmap.Size;
+                    currentSchetsControl.schets.imageRatio = (double)currentSchetsControl.schets.imageSize.Width / (double)currentSchetsControl.schets.imageSize.Height;
+                    App.currentSchetsWindow.MetroWindow_SizeChanged_1(null, null);
+
+                    currentSchetsControl.Schoon();
                 }
 
                 currentSchetsControl.schets.imagePath = newImagePath;
+                App.historyWindow.updateHistoryList();
             }
         }
 
