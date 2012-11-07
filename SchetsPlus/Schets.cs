@@ -9,29 +9,29 @@ namespace SchetsPlus
     [Serializable]
     public class Schets
     {
-        public Bitmap bitmap;
-        public Bitmap loadedBitmap;
+        public Bitmap bitmap;           // Bitmap waarop getekend wordt.
+        public Bitmap loadedBitmap;     // Bitmap die de gebruiker eventueel heeft geladen (achtergrond)
 
-        public Size imageSize;
-        public double imageRatio;
-        public string imageName;
-        public string imagePath;
+        public Size imageSize;          // Grootte van het plaatje
+        public double imageRatio;       // Breedte/hoogteverhouding
+        public string imageName;        // Naam + extentie
+        public string imagePath;        // Volledige pad naar bestand
 
-        public int rotation;
+        public int rotation;            // Aantal graden rotatie
 
-        public int actionDrawLimit;
-        public int actionEraseLimit = -1;
+        public int actionDrawLimit;         // Limiet tot waar acties getekend moeten worden (bij selectie uit historywindow)
+        public int actionEraseLimit = -1;   // Limiet tot waar acties gewist moeten worden (bij selectie uit historywindow)
 
-        public Color primaryColor;
-        public Color secondaryColor;
+        public Color primaryColor;      // Primaire kleur uit colourpicker
+        public Color secondaryColor;    // Secondaire kleur uit colourpicker
 
         public ObservableCollection<Action> actions = new ObservableCollection<Action>();   // ObservableCollection to automatically update historyWindow
 
-        public Graphics BitmapGraphics
+        public Graphics BitmapGraphics  // Bitmapgraphics, voor gebruik bij tekenen
         {
             get
             {
-                if (bitmap == null)
+                if (bitmap == null)     // Indien null, zoals na laden dmv serialization, nieuwe bitmap on-demand aanmaken
                 {
                     this.bitmap = new Bitmap(imageSize.Width, imageSize.Height);
                 }
@@ -41,7 +41,7 @@ namespace SchetsPlus
 
         public Schets(string name, Size imageSize)
         {
-            this.rotation = 0;
+            this.rotation = 0;          // Init vars
             this.imageName = name;
             this.imageSize = imageSize;
             this.imageRatio = (double) imageSize.Width / (double) imageSize.Height;
@@ -51,43 +51,22 @@ namespace SchetsPlus
             secondaryColor = Color.White;
         }
 
-        public void VeranderAfmeting(Size sz)
-        {
-            if (bitmap is Bitmap)
-            {
-
-            }
-        }
         public void Teken(Graphics gr, int width, int height)
         {
-            gr.Clear(Color.White);
-            gr.DrawImage(bitmap, 0, 0, width, height);
+            gr.Clear(Color.White);                          // Witte achtergrond
+            gr.DrawImage(bitmap, 0, 0, width, height);      // Daaroverheen het getekende kunstwerk
         }
 
-        public void TekenFromActions(SchetsControl s)
+        public void TekenFromActions(SchetsControl s)       // Tekenen via acties
         {
-            Color tempPrimary = primaryColor;
+            Color tempPrimary = primaryColor;               // Tijdelijke primaire kleur vastleggen, zodat deze naderhand weer teruggezet kan worden
             App.currentSchetsWindow.currentSchetsControl.Schoon();
 
-            switch (rotation)
-            {
-                case 90:
-                    Roteer(false);
-                    break;
-                case 180:
-                    Roteer(false); Roteer(false);
-                    break;
-                case 270:
-                    Roteer(true);
-                    break;
-            }
-
-            for (int i = 0; i < actions.Count; i++)
+            for (int i = 0; i < actions.Count; i++)                             // Starten met alles tekenen
             {
                 actions[i].drawAction = true;
             }
-
-            for (int i = 0; i <= actionDrawLimit && i < actions.Count; i++)
+            for (int i = 0; i <= actionDrawLimit && i < actions.Count; i++)     // Weggegumde objecten binnen bereik niet tekenen
             {
                 if (actions[i] is FancyEraserAction)
                 {
@@ -98,14 +77,7 @@ namespace SchetsPlus
                     s.schets.actionEraseLimit = -1;
                 }
             }
-            for (int i = actionDrawLimit + 1; i < actions.Count; i++)
-            {
-                if (actions[i] is FancyEraserAction)
-                {
-                    ((FancyEraserAction)actions[i]).erasedAction.drawAction = true;
-                }
-            }
-            for (int i = 0; i <= actionDrawLimit && i < actions.Count; i++)
+            for (int i = 0; i <= actionDrawLimit && i < actions.Count; i++)     // Overgebleven objecten wèl tekenen
             {
                 s.currentAction = actions[i];
                 if (actions[i].drawAction && !(actions[i] is FancyEraserAction))
@@ -113,29 +85,19 @@ namespace SchetsPlus
                     actions[i].draw(s);
                 }
             }
-
-            switch (rotation)
-            {
-                case 90:
-                    Roteer(true);
-                    break;
-                case 180:
-                    Roteer(false); Roteer(false);
-                    break;
-                case 270:
-                    Roteer(true);
-                    break;
-            }
         }
 
         public void Schoon()
         {
-            Debug.WriteLine("SCHOON");
-            bitmap = loadedBitmap;
+            BitmapGraphics.FillRectangle(Brushes.White, 0, 0, imageSize.Width, imageSize.Height);
+            if (loadedBitmap != null)
+            {
+                BitmapGraphics.DrawImageUnscaledAndClipped(loadedBitmap, new Rectangle(0, 0, imageSize.Width, imageSize.Height));
+            }
         }
-        public void Roteer(bool cw)
+        public void Roteer(bool cw)         // Rotatie, niet geïmplementeerd.
         {
-            /*if (cw)
+            if (cw)
             {
                 bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
                 rotation += 90;
@@ -150,7 +112,8 @@ namespace SchetsPlus
                     rotation = 270;
             }
 
-            imageSize = bitmap.Size;*/
+            imageSize = bitmap.Size;
+            App.currentSchetsWindow.MetroWindow_SizeChanged_1(null, null);
         }
     }
 }

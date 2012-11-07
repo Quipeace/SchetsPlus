@@ -16,8 +16,8 @@ namespace SchetsPlus
     public partial class SchetsWindow : MetroWindow
     {
         public List<SchetsControl> schetsControls = new List<SchetsControl>();
-        public List<WindowsFormsHost> hosts = new List<WindowsFormsHost>();
-        public ObservableCollection<TabItem> tabItems = new ObservableCollection<TabItem>();    // ObservableCollection to automatically update tabControl
+        public List<WindowsFormsHost> hosts = new List<WindowsFormsHost>();                     // Hosts, opgeslagen voor schalen
+        public ObservableCollection<TabItem> tabItems = new ObservableCollection<TabItem>();    // ObservableCollection zodat tabs automagisch toegevoegd worden
         public SchetsControl currentSchetsControl;
         public WindowsFormsHost currentHost;
 
@@ -26,14 +26,13 @@ namespace SchetsPlus
         public SchetsWindow()
         {
             InitializeComponent();
-            tabControl.ItemsSource = tabItems;
+            tabControl.ItemsSource = tabItems;      // Tabs binden aan itemssource
 
-            addNewSchets();
-
-            App.schetsWindows.Add(this);
+            addNewSchets();                         // Eerste schets toevoegen
+            App.schetsWindows.Add(this);            // Dit nieuwe window toevoegen aan lijst met windows
         }
 
-        public SchetsWindow(SchetsControl control)
+        public SchetsWindow(SchetsControl control)  // Constructor aangeroepen wanneer een tab in een nieuw window geopend wordt.
         {
             InitializeComponent();
             tabControl.ItemsSource = tabItems;
@@ -43,49 +42,49 @@ namespace SchetsPlus
             App.schetsWindows.Add(this);
         }
 
-        private void addNewSchets()
+        private void addNewSchets()                 // Nieuwe schets aanmaken en toevoegen
         {
             currentSchetsControl = new SchetsControl("new(" + schetsControls.Count + ").schep");
             addCurrentSchetsControl();
         }
 
-        private void addExistingSchetsControl(SchetsControl schetsControl)
+        private void addExistingSchetsControl(SchetsControl schetsControl)  // bestaande schets toe laten voegen aan lijst
         {
             currentSchetsControl = schetsControl;
             addCurrentSchetsControl();
         }
 
-        private void addCurrentSchetsControl()
+        private void addCurrentSchetsControl()              // Huidige schetscontrol aan tabItems en lijst toevoegen
         {
-            schetsControls.Add(currentSchetsControl);
-            MetroWindow_SizeChanged_1(null, null);
+            schetsControls.Add(currentSchetsControl);      
+            MetroWindow_SizeChanged_1(null, null);          // control laten schalen indien het groter is dan het huidige venster
             
-            WindowsFormsHost newHost = new WindowsFormsHost();
+            WindowsFormsHost newHost = new WindowsFormsHost();  // WindowsFormsHosts om bestaande SchetsControl in te kunnen huisvesten
             newHost.Width = currentSchetsControl.Width;
             newHost.Height = currentSchetsControl.Height;
             newHost.Child = currentSchetsControl;
             hosts.Add(newHost);
 
-            TabItem newItem = new TabItem();
+            TabItem newItem = new TabItem();                    // Tabitem aanmaken met imageNaam, enige content is de host van hierboven
             newItem.Header = currentSchetsControl.schets.imageName;
             newItem.Content = newHost;
 
-            MenuItem mnCloseTab = new MenuItem();
+            MenuItem mnCloseTab = new MenuItem();               // Menuitem voor het sluiten van een tab
             mnCloseTab.Header = "Close";
             mnCloseTab.Click += mnCloseTab_Click;
             mnCloseTab.Tag = newItem;
 
-            MenuItem mnTabInWindow = new MenuItem();
+            MenuItem mnTabInWindow = new MenuItem();            // Menuitem voor het openen in nieuw venster
             mnTabInWindow.Header = "Open in new window";
             mnTabInWindow.Click += mnTabInWindow_Click;
             mnTabInWindow.Tag = newItem;
 
-            ContextMenu ctxMenu = new ContextMenu();
+            ContextMenu ctxMenu = new ContextMenu();            // Menuitems toevoegen aan contextmenu, voor een right-click action
             ctxMenu.Items.Add(mnCloseTab);
             ctxMenu.Items.Add(mnTabInWindow);
             newItem.ContextMenu = ctxMenu;
 
-            tabItems.Add(newItem);
+            tabItems.Add(newItem);                              // Tabitem aan lijst toevoegen, en als huidige tab zetten
             tabControl.SelectedIndex = tabItems.Count - 1;
         }
 
@@ -134,45 +133,68 @@ namespace SchetsPlus
             App.historyWindow.Topmost = false;
         }
 
-        private void MetroWindow_Closing_1(object sender, System.ComponentModel.CancelEventArgs e)
+        private void MetroWindow_Closing_1(object sender, System.ComponentModel.CancelEventArgs e)  // Sluiten van dit venster
         {
-            App.schetsWindows.Remove(this);         // Remove this window from the list of open windows
-            if (App.schetsWindows.Count == 0)       // If the list is empty, close helpers as well
+            int unsavedControl = -1;
+            for (int i = 0; i < schetsControls.Count; i++)      // Door lijst van controls van dit venster lopen
             {
-                App.toolsWindow.Close();
-                App.colorPickerWindow.Close();
-                App.historyWindow.Close();
+                if (schetsControls[i].isDirty)                  // Als isDirty heeft de gebruiker iets aangepast sinds het openen
+                {
+                    unsavedControl = i;
+                }
+            }
+            if (unsavedControl != -1)
+            {
+                MessageBoxResult result = MessageBox.Show(schetsControls[unsavedControl].schets.imageName + " contains unsaved changes, close anyway?", "Attention", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                e.Cancel = result == MessageBoxResult.No;       // De gebruiker kiest ervoor niet te sluiten
+            }
+
+            if (!e.Cancel)
+            {
+                App.schetsWindows.Remove(this);         // Remove this window from the list of open windows
+                if (App.schetsWindows.Count == 0)       // If the list is empty, close helpers as well
+                {
+                    App.toolsWindow.Close();
+                    App.colorPickerWindow.Close();
+                    App.historyWindow.Close();
+                }
+            }
+            else
+            {
+                tabControl.SelectedIndex = unsavedControl;  // De gebruiker wil het bestand eerst opslaan voor sluiten, actief maken
+                mnSave_Click(null, null);                   // en opslaan simuleren
             }
         }
 
         public void MetroWindow_SizeChanged_1(object sender, SizeChangedEventArgs e)
         {
             pinWindows();       // Size changed, move helper windows accordingly
-
+                                // Als het venster kleiner is dan het plaatje...
             if (this.Width < currentSchetsControl.schets.imageSize.Width || (this.Height - 80) < currentSchetsControl.schets.imageSize.Height)
             {
-                double widthDiff = this.Width / currentSchetsControl.schets.imageSize.Width;
+                double widthDiff = this.Width / currentSchetsControl.schets.imageSize.Width;            // Verhoudingen berekenen
                 double heightDiff = (this.Height - 80) / currentSchetsControl.schets.imageSize.Height;
 
-                if (heightDiff < widthDiff)
+                if (heightDiff < widthDiff)     // Als de hoogte meer afwijkt dan de breedte
                 {
-                    currentSchetsControl.Height = (int)this.Height - 80;
+                    currentSchetsControl.Height = (int)this.Height - 80;        // De hoogte als uitgangspunt nemen
                     currentSchetsControl.Width = (int)(currentSchetsControl.Height * currentSchetsControl.schets.imageRatio);
                 }
                 else
                 {
-                    currentSchetsControl.Width = (int)this.Width;
+                    currentSchetsControl.Width = (int)this.Width;               // Zo niet, de breedte
                     currentSchetsControl.Height = (int)((this.Width) / currentSchetsControl.schets.imageRatio);
                 }
             }
-            else
+            else        // Het plaatje is niet groter dan het venster, dus de volledige size zetten
             {
                 currentSchetsControl.Width = currentSchetsControl.schets.imageSize.Width;
                 currentSchetsControl.Height = currentSchetsControl.schets.imageSize.Height;
             }
-            try
+
+            try         // Try zodat een nullpointer wordt voorkomen bij het aanmaken van een schets (waar schaling van de host nog niet belangrijk is)
             {
-                App.currentSchetsWindow.currentHost.Width = currentSchetsControl.Width;
+                App.currentSchetsWindow.currentHost.Width = currentSchetsControl.Width; // Host evengroot als plaatje maken om clipping te voorkomen
                 App.currentSchetsWindow.currentHost.Height = currentSchetsControl.Height;
             }
             catch (NullReferenceException) { }
@@ -263,29 +285,29 @@ namespace SchetsPlus
             pinColorPickerWindow();
         }
 
-        private void mnCloseTab_Click(object sender, RoutedEventArgs e)
+        private void mnCloseTab_Click(object sender, RoutedEventArgs e)     // Een tab wil gesloten worden
         {
             MenuItem sendingItem = (MenuItem)sender;
             TabItem connectedTab = (TabItem)sendingItem.Tag;
-            WindowsFormsHost controlHost = (WindowsFormsHost) connectedTab.Content;
+            WindowsFormsHost controlHost = (WindowsFormsHost) connectedTab.Content; // Host ophalen uit tabItem
             for(int i = 0; i < schetsControls.Count; i++)
             {
-                if(schetsControls[i].Equals(controlHost.Child))
+                if(schetsControls[i].Equals(controlHost.Child))                     // Nummer van schetsControl opzoeken, en uit lijst verwijderen
                 {
                     schetsControls.Remove(schetsControls[i]);
                     break;
                 }
             }
-            tabItems.Remove((TabItem) sendingItem.Tag);
+            tabItems.Remove((TabItem) sendingItem.Tag);                             // Uiteindelijk de tab zelf verwijderen
         }
 
-        void mnTabInWindow_Click(object sender, RoutedEventArgs e)
+        void mnTabInWindow_Click(object sender, RoutedEventArgs e)                  // Tab openen in nieuw venster
         {
-            MenuItem sendingItem = (MenuItem)sender;
+            MenuItem sendingItem = (MenuItem)sender; 
             TabItem connectedTab = (TabItem)sendingItem.Tag;
-            WindowsFormsHost controlHost = (WindowsFormsHost) connectedTab.Content;
+            WindowsFormsHost controlHost = (WindowsFormsHost) connectedTab.Content; // Host weer opzoeken
 
-            SchetsWindow newWindow = new SchetsWindow((SchetsControl) controlHost.Child);
+            SchetsWindow newWindow = new SchetsWindow((SchetsControl) controlHost.Child);   // Nieuw venster openen met het bestaande schetscontrol
             newWindow.Show();
             
             mnCloseTab_Click(sender, null);
@@ -293,11 +315,11 @@ namespace SchetsPlus
 
         private void mnSave_Click(object sender, RoutedEventArgs e)
         {
-            saveCurrentSchets(false);
+            saveCurrentSchets(false);       // Opslaan zonder verplicht dialog
         }
         private void mnSaveAs_Click(object sender, RoutedEventArgs e)
         {
-            saveCurrentSchets(true);
+            saveCurrentSchets(true);       // Opslaan met verplicht dialog
         }
 
         private void saveCurrentSchets(Boolean alwaysShowDialog)
@@ -305,10 +327,10 @@ namespace SchetsPlus
             bool save;
             if (currentSchetsControl.schets.imagePath == null || alwaysShowDialog)
             {
-                Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+                Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();      // Nieuw save dialog    
                 dlg.FileName = currentSchetsControl.schets.imageName; // Default file name
                 dlg.DefaultExt = ".schep";
-                dlg.Filter = "SchetsPlus Image (.schep)|*.schep|" + 
+                dlg.Filter = "SchetsPlus Image (.schep)|*.schep|" +                             // COmpatible bestandsformaten
                              "BMP (*.bmp)|*.bmp|"+
                              "EMF (*.emf)|*.emf|"+
                              "GIF (*.gif)|*.gif|" +
@@ -332,7 +354,9 @@ namespace SchetsPlus
 
             if (save)
             {
-                for (int i = 0; i < schetsControls.Count; i++)
+                currentSchetsControl.isDirty = false;           // Opgeslagen, dus niet dirty
+
+                for (int i = 0; i < schetsControls.Count; i++)  // Bestandsnaam updaten
                 {
                     if (schetsControls[i].Equals(currentSchetsControl))
                     {
@@ -342,7 +366,7 @@ namespace SchetsPlus
 
                 try
                 {
-                    if(currentSchetsControl.schets.imagePath.EndsWith(".bmp"))
+                    if(currentSchetsControl.schets.imagePath.EndsWith(".bmp"))  // bitmap opslaan naar extensie
                     {
                         currentSchetsControl.schets.bitmap.Save(currentSchetsControl.schets.imagePath, System.Drawing.Imaging.ImageFormat.Bmp);
                     }
@@ -374,18 +398,24 @@ namespace SchetsPlus
                     {
                         currentSchetsControl.schets.bitmap.Save(currentSchetsControl.schets.imagePath, System.Drawing.Imaging.ImageFormat.Wmf);
                     }
-                    else
+                    else  // Anders opslaan als .schep
                     {
-                        Stream stream = File.Open(currentSchetsControl.schets.imagePath, FileMode.Create);
-                        BinaryFormatter formatter = new BinaryFormatter();
-                        formatter.Serialize(stream, currentSchetsControl.schets);
+                        Stream stream = File.Open(currentSchetsControl.schets.imagePath, FileMode.Create);  // Stream openen
+                        BinaryFormatter formatter = new BinaryFormatter();                                  // Formatter aanmaken
+                        formatter.Serialize(stream, currentSchetsControl.schets);                           // Serializen en schrijven
                         stream.Close();
                     }
                 }
                 catch (IOException)
                 {
-                    // Show error
+                    currentSchetsControl.isDirty = true;        // Een fout, dus niet opgeslagen, dus nog steeds dirty
+                    MessageBoxResult result = MessageBox.Show("An error occured saving" + currentSchetsControl.schets.imageName + ". Retry?", "Attention", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        mnSave_Click(null, null);   // opnieuw proberen naar gebruikers inbreng
+                    }
                 }
+
             }
         }
 
@@ -393,16 +423,9 @@ namespace SchetsPlus
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.DefaultExt = ".schep";
-            dlg.Filter = "SchetsPlus Image (.schep)|*.schep|" +
-                         "BMP (*.bmp)|*.bmp|" +
-                         "EMF (*.emf)|*.emf|" +
-                         "GIF (*.gif)|*.gif|" +
-                         "ICO (*.ico)|*.ico|" +
-                         "JPEG (*.jpg)|*.jpg|" +
-                         "PNG (*.png)|*.png|" +
-                         "TIFF (*.tif)|*.tif|" +
-                         "WMF (*.wmf)|*.wmf|" +
-                         "All Files (*.*)|*.*";
+               dlg.Filter = "SchetsPlus Image (.schep)|*.schep|" +  // Enkel BMP compatible bij laden (wellicht door transparantie?)
+                             "BMP (*.bmp)|*.bmp|"+
+                             "All Files (*.*)|*.*";
 
             // Show open file dialog box 
             Nullable<bool> result = dlg.ShowDialog();
@@ -413,10 +436,10 @@ namespace SchetsPlus
                 String newImagePath = dlg.FileName;
                 if(currentSchetsControl.schets.actions.Count != 0)
                 {
-                    addNewSchets();
+                    addNewSchets();         // Nieuw schetscontrol
                 }
 
-                if (newImagePath.EndsWith(".schep"))
+                if (newImagePath.EndsWith(".schep"))    // Schetsbestand, dus openen en deserializen
                 {
                     Stream stream = File.OpenRead(newImagePath);
                     BinaryFormatter formatter = new BinaryFormatter();
@@ -425,10 +448,11 @@ namespace SchetsPlus
 
                     currentSchetsControl.schets.TekenFromActions(currentSchetsControl);
                 }
-                else
+                else    // Het is een conventioneel plaatje, dus bitmap laten openen en aan de huidige control toevoegen
                 {
                     Bitmap bmp = new Bitmap(newImagePath);
                     currentSchetsControl.schets.loadedBitmap = bmp;
+                    currentSchetsControl.schets.bitmap = new Bitmap(bmp.Width, bmp.Height);
                     currentSchetsControl.schets.imageSize = currentSchetsControl.schets.bitmap.Size;
                     currentSchetsControl.schets.imageRatio = (double)currentSchetsControl.schets.imageSize.Width / (double)currentSchetsControl.schets.imageSize.Height;
                     App.currentSchetsWindow.MetroWindow_SizeChanged_1(null, null);
@@ -436,31 +460,33 @@ namespace SchetsPlus
                     currentSchetsControl.Schoon();
                 }
 
-                currentSchetsControl.schets.imagePath = newImagePath;
-                App.historyWindow.updateHistoryList();
+                currentSchetsControl.schets.imagePath = newImagePath;   // Pad updaten
+                App.historyWindow.updateHistoryList();                  // Net zoals de history
             }
         }
 
         private void mnModifyCanvas_Click(object sender, RoutedEventArgs e)
         {
-            CanvasSizeDialog dialog = new CanvasSizeDialog();
+            CanvasSizeDialog dialog = new CanvasSizeDialog();           // canvasdialog openen
             dialog.Left = this.Left + this.Width - dialog.Width;
             dialog.Top = this.Top + 30;
             dialog.ShowDialog();
         }
 
-        private void mnRotateCCW_Click(object sender, RoutedEventArgs e)
+        private void mnRotateCCW_Click(object sender, RoutedEventArgs e)    // Rotate couterclockwise-niet geimplementeerd
         {
-            currentSchetsControl.schets.Roteer(false);
-            MetroWindow_SizeChanged_1(null, null);
-            currentSchetsControl.Invalidate();
+            RotateAction newAction = new RotateAction(false);
+            currentSchetsControl.schets.actions.Add(newAction);
+
+            App.historyWindow.updateHistoryList();
         }
 
-        private void mnRotateCw_Click(object sender, RoutedEventArgs e)
+        private void mnRotateCw_Click(object sender, RoutedEventArgs e)     // clockwise, idem.
         {
-            currentSchetsControl.schets.Roteer(true);
-            MetroWindow_SizeChanged_1(null, null);
-            currentSchetsControl.Invalidate();
+            RotateAction newAction = new RotateAction(false);
+            currentSchetsControl.schets.actions.Add(newAction);
+
+            App.historyWindow.updateHistoryList();
         }
     }
 }

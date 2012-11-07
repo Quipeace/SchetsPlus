@@ -17,7 +17,7 @@ namespace SchetsPlus
     public abstract class StartpuntTool : ISchetsTool   
     {
         protected Point startpunt;  //Aanmaken van het startpunt en van de kleur waarmee getekent wordt
-        protected Brush kwast;
+        protected Brush kwast = Brushes.Black;
 
         public virtual void MuisVast(SchetsControl s, Point p)
         {

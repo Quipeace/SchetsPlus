@@ -379,4 +379,32 @@ namespace SchetsPlus
             return false;
         }
     }
+
+    [Serializable]
+    public class RotateAction : Action
+    {
+        public bool cw;
+
+        public RotateAction(bool cw)
+        {
+            this.cw = cw;
+        }
+
+        public override void onMouseMove(int x, int y) 
+        {
+        }
+        public override string ToString()
+        {
+            return "Rotate Image"; 
+        }
+        public override void draw(SchetsControl s)  //Functie waarmee wordt bepaald waar er getekend moet worden
+        {
+            base.draw(s);
+            s.schets.Roteer(cw);
+        }
+        public override bool isInClick(int x, int y)    //Functie waarmee je bekijkt of je binnen de ellipse geklikt hebt
+        {
+            return false;
+        }
+    }
 }

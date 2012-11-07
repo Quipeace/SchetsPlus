@@ -10,6 +10,8 @@ namespace SchetsPlus
     {
         private Bitmap overlayBitmap;   //Declareren overlayBitmap die later gebruikt wordt
 
+        public bool isDirty = false;
+
         public ISchetsTool currentTool; //Declareren van de currenttool die gebruikt wordt
         public Action currentAction;    //Declareren van de currentAction die gebruikt wordt
 
@@ -31,6 +33,7 @@ namespace SchetsPlus
 
             this.MouseDown += (object o, MouseEventArgs mea) =>
             {
+                isDirty = true;
                 muisVast = true;    //Zeggen dat muisVast true is, zodra je muis indrukt
 
                 overlayBitmap = new Bitmap(schets.imageSize.Width, schets.imageSize.Height);    //Zetten van overlayBitmap met de width en height
@@ -122,8 +125,8 @@ namespace SchetsPlus
             int newTestX = schets.imageSize.Width;
             int newMouseX;
             int newMouseY;
-            if (currentTool is FancyEraser)
-            {
+            if (currentTool is FancyEraser)                         // Translatie van muiscoordinaten indien het plaatje geroteerd is, enkel van belang bij gummen
+            {                                                       //                                                                 van objecten                                                                           
                 switch (schets.rotation)
                 {
                     case 90:

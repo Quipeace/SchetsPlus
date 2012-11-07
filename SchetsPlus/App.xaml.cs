@@ -5,7 +5,7 @@ namespace SchetsPlus
 {
     public partial class App : Application
     {
-        public static ToolsWindow toolsWindow = new ToolsWindow();      //De windows aanroepen bij het openen van de applicatie
+        public static ToolsWindow toolsWindow = new ToolsWindow();      //De windows aanmaken bij het openen van de applicatie
         public static ColorPickerWindow colorPickerWindow = new ColorPickerWindow();
         public static HistoryWindow historyWindow = new HistoryWindow();
 
