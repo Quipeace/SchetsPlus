@@ -18,17 +18,24 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <TabControl >
-        <TabItem Header="History">
-
-            <ListBox x:Name="lvHistory" HorizontalAlignment="Left" Height="218" VerticalAlignment="Top" Width="273" Background="#FF8B3A3A" SelectionChanged="lvHistory_SelectionChanged" Margin="15,0,0,0"/>
-        </TabItem>
-    </TabControl>
-
+    <Canvas>
+        <ListBox x:Name="lvHistory" HorizontalAlignment="Left" Height="203" VerticalAlignment="Top" Width="273" Background="#FF8B3A3A" SelectionChanged="lvHistory_SelectionChanged" Canvas.Top="56" Canvas.Left="9"/>
+        <Label Width="100" FontSize="27" Foreground="#FFC259FF" Canvas.Left="10" Canvas.Top="5" Content="History"/>
+    </Canvas>
 
     <Controls:MetroWindow.WindowCommands>
         <Controls:WindowCommands>
+            <Button x:Name="btClean" Click="btClean_Click">
+                <Image Source="Resources/imClean.png" />
+            </Button>
+            <Button x:Name="btUndo" Click="btUndo_Click">
+                <Image Source="Resources/imUndo.png" />
+            </Button>
+            <Button x:Name="btRedo" Click="btRedo_Click">
+                <Image Source="Resources/imRedo.png" />
+            </Button>
             <Button x:Name="btPin" Content="pin" Click="btPin_Click" />
+
         </Controls:WindowCommands>
     </Controls:MetroWindow.WindowCommands>
 </Controls:MetroWindow>

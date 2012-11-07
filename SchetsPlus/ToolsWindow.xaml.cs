@@ -1,6 +1,6 @@
 ﻿using MahApps.Metro.Controls;
 using System.Windows;
-using System.Windows.Controls.Primitives;
+using System.Windows.Controls;
 
 namespace SchetsPlus
 {
@@ -42,7 +42,7 @@ namespace SchetsPlus
 
         private void toolButton_Click(object sender, RoutedEventArgs e)
         {
-            ToggleButton clickedButton = (ToggleButton)sender;
+            Button clickedButton = (Button)sender;
 
             if (clickedButton.Name == "btPen")
             {

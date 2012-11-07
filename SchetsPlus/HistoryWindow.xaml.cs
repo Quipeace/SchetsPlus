@@ -22,7 +22,7 @@ namespace SchetsPlus
             isPinned = !isPinned;
             if (isPinned)
             {
-                App.currentSchetsWindow.pinToolsWindow();
+                App.currentSchetsWindow.pinHistoryWindow();
             }
         }
 
@@ -66,6 +66,27 @@ namespace SchetsPlus
             {
                 App.currentSchetsWindow.currentSchetsControl.schets.actionDrawLimit = lvHistory.SelectedIndex;
                 App.currentSchetsWindow.currentSchetsControl.schets.TekenFromActions(App.currentSchetsWindow.currentSchetsControl);
+            }
+        }
+
+        private void btClean_Click(object sender, RoutedEventArgs e)
+        {
+            lvHistory.SelectedIndex = - 1;
+        }
+
+        private void btUndo_Click(object sender, RoutedEventArgs e)
+        {
+            if (lvHistory.SelectedIndex >= 0)
+            {
+                lvHistory.SelectedIndex = lvHistory.SelectedIndex - 1;
+            }
+        }
+
+        private void btRedo_Click(object sender, RoutedEventArgs e)
+        {
+            if (lvHistory.SelectedIndex < App.currentSchetsWindow.currentSchetsControl.schets.actions.Count)
+            {
+                lvHistory.SelectedIndex++;
             }
         }
     }

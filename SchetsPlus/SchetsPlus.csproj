@@ -152,6 +152,26 @@
   <ItemGroup>
     <Resource Include="Resources\colorwheel.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\imEllipse.png" />
+    <Resource Include="Resources\imLine.png" />
+    <Resource Include="Resources\imPen.png" />
+    <Resource Include="Resources\imRectangle.png" />
+    <Resource Include="Resources\imText.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\imRedo.png" />
+    <Resource Include="Resources\imUndo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\imClean.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\imFillEllipse.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\imFillRectangle.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
