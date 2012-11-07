@@ -110,10 +110,16 @@ namespace SchetsPlus
             if (cw)
             {
                 bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                rotation += 90;
+                if(rotation > 270) 
+                    rotation = 0;
             }
             else
             {
                 bitmap.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                rotation -= 90;
+                if (rotation < 0)
+                    rotation = 270;
             }
 
             imageSize = bitmap.Size;

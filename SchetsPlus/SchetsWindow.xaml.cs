@@ -439,12 +439,14 @@ namespace SchetsPlus
         {
             currentSchetsControl.schets.Roteer(false);
             MetroWindow_SizeChanged_1(null, null);
+            currentSchetsControl.Invalidate();
         }
 
         private void mnRotateCw_Click(object sender, RoutedEventArgs e)
         {
             currentSchetsControl.schets.Roteer(true);
             MetroWindow_SizeChanged_1(null, null);
+            currentSchetsControl.Invalidate();
         }
     }
 }
