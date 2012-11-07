@@ -22,29 +22,29 @@ namespace SchetsPlus
 
     public partial class ToolsWindow : MetroWindow
     {
-        public bool isPinned;
+        public bool isPinned;   //Declareren van de boolean die bijhoudt of er op pinned geklikt is
 
         public ToolsWindow()
         {
             InitializeComponent();
 
-            this.isPinned = true;
+            this.isPinned = true;   //Zet pinned standaard op true
         }
 
         private void btPin_Click(object sender, RoutedEventArgs e)
         {
-            isPinned = !isPinned;
+            isPinned = !isPinned;       //Indien er op pin geklikt is, maak pinned dan tegenovergestelde
             if (isPinned)
             {
-                App.currentSchetsWindow.pinToolsWindow();
+                App.currentSchetsWindow.pinToolsWindow();   //Indien pinned is true, pin de toolswindow dan
             }
         }
 
         private void toolButton_Click(object sender, RoutedEventArgs e)
         {
-            Button clickedButton = (Button)sender;
+            Button clickedButton = (Button)sender; //Zeggen dat clickedbutton = het object waarop geklikt is, wat sowieso een button is
 
-            if (clickedButton.Name == "btPen")
+            if (clickedButton.Name == "btPen")  //Het zetten van alle buttons en ook zeggen welke tools daar dan mee te maken hebben
             {
                 App.currentSchetsWindow.currentSchetsControl.currentTool = App.availableTools[0];
             }

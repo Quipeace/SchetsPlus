@@ -18,49 +18,49 @@ namespace SchetsPlus
         {
             InitializeComponent();
            
-            this.isPinned = true;
+            this.isPinned = true;   //Zet standaard op pinned
         }
 
         private void btPin_Click(object sender, RoutedEventArgs e)
         {
-            isPinned = !isPinned;
+            isPinned = !isPinned;   //Verander pinned naar tegenovergestelde
             if (isPinned)
             {
-                App.currentSchetsWindow.pinColorPickerWindow();
+                App.currentSchetsWindow.pinColorPickerWindow(); //Indien pinned = true, pin dan
             }
         }
 
         private void sliderRed_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            tbRed.Text = ((int)sliderRed.Value).ToString();
-            setColorFromBoxes();
-            updateHexColor();
+            tbRed.Text = ((int)sliderRed.Value).ToString(); //Neem de waarde van de slider en maak hier een string van
+            setColorFromBoxes();    //Gebruik deze color als primary color
+            updateHexColor();   //Update de heximale kleur
         }
         private void sliderGreen_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            tbGreen.Text = ((int)sliderGreen.Value).ToString();
-            setColorFromBoxes();
-            updateHexColor();
+            tbGreen.Text = ((int)sliderGreen.Value).ToString(); //Neem de waarde van de slider en maak hier een string van
+            setColorFromBoxes();    //Gebruik deze color als primary color
+            updateHexColor();   //Update de heximale kleur
         }
         private void sliderBlue_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            tbBlue.Text = ((int)sliderBlue.Value).ToString();
-            setColorFromBoxes();
-            updateHexColor();
+            tbBlue.Text = ((int)sliderBlue.Value).ToString();   //Neem de waarde van de slider en maak hier een string van
+            setColorFromBoxes();    //Gebruik deze color als primary color
+            updateHexColor();   //Update de heximale kleur
         }
         private void tbHexColor_TextChanged(object sender, TextChangedEventArgs e)
         {
             string colorcode = tbHexColor.Text;
-            try
+            try         //Probeer de primarykleur te zetten
             {
                 int colorAsInt = Int32.Parse(colorcode.Replace("#", ""), NumberStyles.HexNumber);
-                byte b = (byte)(colorAsInt & 255);
+                byte b = (byte)(colorAsInt & 255);  //Het zetten van de verschillende kleuren
                 byte g = (byte)((colorAsInt >> 8) & 255);
                 byte r = (byte)((colorAsInt >> 16) & 255);
                 if (cvPrimaryColor != null)
                 {
-                    cvPrimaryColor.Background = new SolidColorBrush(Color.FromArgb(255, r, g, b));
-                    App.currentSchetsWindow.currentSchetsControl.schets.primaryColor = System.Drawing.Color.FromArgb(255, r, g, b);
+                    cvPrimaryColor.Background = new SolidColorBrush(Color.FromArgb(255, r, g, b));  
+                    App.currentSchetsWindow.currentSchetsControl.schets.primaryColor = System.Drawing.Color.FromArgb(255, r, g, b); //Zeg dat de primaryColor met deze kleur wordt
                 }
             }
             catch (FormatException)
@@ -69,25 +69,25 @@ namespace SchetsPlus
 
         private void setColorFromBoxes()
         {
-            App.currentSchetsWindow.currentSchetsControl.schets.primaryColor = System.Drawing.Color.FromArgb(255, byte.Parse(tbRed.Text), byte.Parse(tbGreen.Text), byte.Parse(tbBlue.Text));
-            cvPrimaryColor.Background = new SolidColorBrush(Color.FromArgb(255, byte.Parse(tbRed.Text), byte.Parse(tbGreen.Text), byte.Parse(tbBlue.Text)));
+            App.currentSchetsWindow.currentSchetsControl.schets.primaryColor = System.Drawing.Color.FromArgb(255, byte.Parse(tbRed.Text), byte.Parse(tbGreen.Text), byte.Parse(tbBlue.Text));   //Zet de primary kleur met deze waardes
+            cvPrimaryColor.Background = new SolidColorBrush(Color.FromArgb(255, byte.Parse(tbRed.Text), byte.Parse(tbGreen.Text), byte.Parse(tbBlue.Text)));    //Ook de achtergrondkleur van de lijn doen
         }
         private void updateHexColor()
         {
-            Color color = ((SolidColorBrush)cvPrimaryColor.Background).Color;
-            tbHexColor.Text = "#" + color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2");
+            Color color = ((SolidColorBrush)cvPrimaryColor.Background).Color;   //Het zetten van de kleur
+            tbHexColor.Text = "#" + color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2");   //Maak de tekst van de heximale kleur
         }
 
         private void cvSecondaryColor_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            SolidColorBrush sBrush = (SolidColorBrush)cvSecondaryColor.Background;
+            SolidColorBrush sBrush = (SolidColorBrush)cvSecondaryColor.Background;  //Het zetten van de primary en secundaire kleur achtergrond
             SolidColorBrush pBrush = (SolidColorBrush)cvPrimaryColor.Background;
             cvSecondaryColor.Background = cvPrimaryColor.Background;
 
-            App.currentSchetsWindow.currentSchetsControl.schets.primaryColor = System.Drawing.Color.FromArgb(sBrush.Color.A, sBrush.Color.R, sBrush.Color.G, sBrush.Color.B);
+            App.currentSchetsWindow.currentSchetsControl.schets.primaryColor = System.Drawing.Color.FromArgb(sBrush.Color.A, sBrush.Color.R, sBrush.Color.G, sBrush.Color.B);   //Zetten van de primaire en secundaire kleur 
             App.currentSchetsWindow.currentSchetsControl.schets.secondaryColor = System.Drawing.Color.FromArgb(pBrush.Color.A, pBrush.Color.R, pBrush.Color.G, pBrush.Color.B);
            
-            sliderRed.Value = sBrush.Color.R;
+            sliderRed.Value = sBrush.Color.R;       //Pas de sliders aan aan de waarde
             sliderGreen.Value = sBrush.Color.G;
             sliderBlue.Value = sBrush.Color.B;
         }
@@ -97,11 +97,11 @@ namespace SchetsPlus
             try // To catch nullpointer that occurs when the color picker hasn't loaded (yet)
             {
                 System.Drawing.Color primary = App.currentSchetsWindow.currentSchetsControl.schets.primaryColor;
-                sliderRed.Value = primary.R;
+                sliderRed.Value = primary.R;        //Het veranderen van de waardes van de sliders
                 sliderGreen.Value = primary.G;
                 sliderBlue.Value = primary.B;
                 App.currentSchetsWindow.currentSchetsControl.schets.primaryColor = primary;
-                updateHexColor();
+                updateHexColor();   //Heximale waarde updaten aan de kleur
 
                 System.Drawing.Color secondary = App.currentSchetsWindow.currentSchetsControl.schets.secondaryColor;
                 cvSecondaryColor.Background = new SolidColorBrush(Color.FromArgb(255, secondary.R, secondary.G, secondary.B));
@@ -142,13 +142,13 @@ namespace SchetsPlus
 
         private void imColorPicker_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Point mousePoint = e.GetPosition(imColorPicker);
+            Point mousePoint = e.GetPosition(imColorPicker);    //Bekijken mouseposition in de kleurbol
 
-            double dist = Math.Sqrt((mousePoint.X - 100) * (mousePoint.X - 100) + (mousePoint.Y - 100) * (mousePoint.Y - 100));
+            double dist = Math.Sqrt((mousePoint.X - 100) * (mousePoint.X - 100) + (mousePoint.Y - 100) * (mousePoint.Y - 100)); //Berekenen afstand
 
             if(dist < 100)
             {
-                GetPixelColor(mousePoint);
+                GetPixelColor(mousePoint);  //Neem de kleur waarop je geklikt hebt
             }
         }     
     }
