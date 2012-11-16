@@ -13,7 +13,7 @@ namespace SchetsPlus
 
             tbHeightPx.Text = App.currentSchetsWindow.currentSchetsControl.schets.imageSize.Height.ToString(); //Zeggen welke width en height getallen er moeten staan
             tbWidthPx.Text = App.currentSchetsWindow.currentSchetsControl.schets.imageSize.Width.ToString();
-            tbWidthPer.Text = "100";    //Zeggen welke percentages er moeten staan
+            tbWidthPer.Text = "100";    //Zeggen welke percentages er standaard moeten staan
             tbHeightPer.Text = "100";
         }
 
